@@ -6,6 +6,12 @@ function onClick(fn) {
   });
 }
 
+function onSubmit(fn) {
+  this.addEventListener('submit', (event) => {
+    fn(event);
+  });
+}
+
 // Assumes using tailwind
 const hide = (el) => {
   el.className += ' hidden';
@@ -20,18 +26,21 @@ const unHide = (el) => {
     .join(' ');
 };
 
-// Elements
-const addListContainer = document.querySelector('#add-list-container');
 const addListBtn = document.querySelector('#add-list-btn');
-const addListForm = document.querySelector('#add-list-form');
-const cancelAddListBtn = document.querySelector('#cancel-add-list');
-
 onClick.bind(addListBtn)((e) => {
   hide(addListBtn);
   unHide(addListForm);
 });
 
+const cancelAddListBtn = document.querySelector('#cancel-add-list-btn');
 onClick.bind(cancelAddListBtn)((e) => {
   hide(addListForm);
   unHide(addListBtn);
+});
+
+const addListForm = document.forms['add-list-form'];
+onSubmit.bind(addListForm)((e) => {
+  e.preventDefault();
+  const value = addListForm.querySelector('input[type="text"]').value;
+  if (!value) return;
 });

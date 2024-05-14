@@ -13,72 +13,128 @@
   </head>
   <body>
     <main class="p-4">
-      <div id="add-list-container">
-        <div
-          id="add-list-form"
-          class="p-3 bg-[#f1f2f4] rounded-xl w-[272px] font-semibold space-y-3 hidden"
-        >
-          <input
-            type="text"
-            class="w-full px-3 py-2"
-            autofocus
-            placeholder="Enter list title..."
-          />
+      <!-- Board -->
+      <div id="board" class="flex gap-4">
+        <ul id="active-lists">
+          <!-- List -->
+          <li class="bg-[#f1f2f4] rounded-xl w-[272px]">
+            <!-- Header -->
+            <div class="px-5 py-4">
+              <h2 class="font-bold">CAPTURE</h2>
+            </div>
 
-          <div class="flex items-center space-x-2">
-            <button
-              id="confirm-add-list"
-              class="bg-[#0c66e4] text-white py-1.5 px-3 rounded-md"
-            >
-              Add list
-            </button>
-
-            <button
-              id="cancel-add-list"
-              class="p-1.5 rounded-md hover:bg-[#091e420f]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-x"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="#000000"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+            <!-- Cards -->
+            <ul class="px-2.5 space-y-2">
+              <li
+                class="w-full p-3 bg-white border border-gray-200 rounded-md shadow-md"
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M18 6l-12 12" />
-                <path d="M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam,
+                eos!
+              </li>
+              <li
+                class="w-full p-3 bg-white border border-gray-200 rounded-md shadow-md"
+              >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam,
+                eos!
+              </li>
+            </ul>
 
-        <button
-          id="add-list-btn"
-          class="p-3 bg-[#f1f2f4] rounded-xl w-[272px] flex items-center space-x-2 font-semibold text-[#44546f]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-plus"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="#44546f"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            <!-- Footer -->
+            <div class="px-2.5 p-3">
+              <button
+                class="text-left p-2.5 w-full bg-[#f1f2f4] rounded-xl font-semibold flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-plus"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="#44546f"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 5l0 14" />
+                  <path d="M5 12l14 0" />
+                </svg>
+                <span> Add a card </span>
+              </button>
+            </div>
+          </li>
+        </ul>
+
+        <div id="add-list-container">
+          <form
+            id="add-list-form"
+            class="p-2.5 bg-[#f1f2f4] rounded-xl w-[272px] font-semibold space-y-3 hidden"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 5l0 14" />
-            <path d="M5 12l14 0" />
-          </svg>
-          <span> Add a list </span>
-        </button>
+            <input
+              type="text"
+              class="w-full px-3 py-2 rounded-md border-[1px] border-gray-400"
+              autofocus
+              placeholder="Enter list title..."
+            />
+
+            <div class="flex items-center space-x-2">
+              <button
+                id="confirm-add-list-btn"
+                type="submit"
+                class="bg-[#0c66e4] text-white py-1.5 px-3 rounded-md"
+              >
+                Add list
+              </button>
+
+              <button
+                id="cancel-add-list-btn"
+                type="button"
+                class="p-1.5 rounded-md hover:bg-[#091e420f]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-x"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="#000000"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M18 6l-12 12" />
+                  <path d="M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <button
+            id="add-list-btn"
+            class="px-5 py-4 bg-[#f1f2f4] rounded-xl w-[272px] flex items-center space-x-2 font-semibold text-[#44546f]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-plus"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="#44546f"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M12 5l0 14" />
+              <path d="M5 12l14 0" />
+            </svg>
+            <span> Add a list </span>
+          </button>
+        </div>
       </div>
     </main>
   </body>

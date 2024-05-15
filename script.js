@@ -8,6 +8,14 @@ function handleEvent(eventName) {
   };
 }
 
+const addClass = (classToAdd) => (el) => {
+  el.classList.add(classToAdd);
+};
+
+const removeClass = (classToRemove) => (el) => {
+  el.classList.remove(classToRemove);
+};
+
 const onClick = handleEvent('click');
 const onMouseDown = handleEvent('mousedown');
 const onMouseUp = handleEvent('mouseup');
@@ -16,22 +24,11 @@ const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
 const onKeyUp = handleEvent('keyup');
 const onDrag = handleEvent('dragstart');
-const onDrop = handleEvent('dragend');
+const onDragEnd = handleEvent('dragend');
 
 // Assumes using tailwind
-const hide = (el) => {
-  // Alternative: Use hidden attribute (display: block)
-  el.className += ' hidden';
-};
-
-const unHide = (el) => {
-  // Convert DOM list (https://stackoverflow.com/questions/3199588/fastest-way-to-convert-javascript-nodelist-to-array)
-  const classList = [...el.classList];
-  // Turn array back to string and assign to className
-  el.className = classList
-    .filter((className) => className !== 'hidden')
-    .join(' ');
-};
+const hide = addClass('hidden');
+const unHide = removeClass('hidden');
 
 const getClassList = (el) => {
   return [...el.classList];
@@ -44,20 +41,20 @@ const addNewList = (parentEl, title) => {
   li.setAttribute('draggable', 'true');
   li.className =
     // relative + z-index removes parent bg when dragging element
-    'w-[272px] self-start relative z-[1]';
+    'list w-[272px] self-start relative z-[1]';
 
   const innerLiDiv = document.createElement('div');
   innerLiDiv.className =
     'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const shadowDiv = document.createElement('div');
-  shadowDiv.hidden = true;
-  shadowDiv.className = 'absolute w-full h-full rounded-xl bg-[#504d4d]';
+  shadowDiv.className =
+    'list-shadow absolute w-full h-full rounded-xl bg-[#787474] opacity-0';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
   listH2.className =
-    'px-3 py-2 font-semibold rounded-md cursor-pointer list-title';
+    'px-3 pt-1 pb-2 font-semibold rounded-md cursor-pointer list-title';
   listH2.textContent = title;
 
   const titleInput = document.createElement('input');
@@ -187,3 +184,28 @@ onKeyUp.bind(activeLists)((e) => {
 });
 
 // Handle drag
+onDrag.bind(activeLists)((e) => {
+  if (getClassList(e.target).includes('list')) {
+    const list = e.target;
+    const innerDiv = list.querySelector('div');
+    const listShadow = innerDiv.querySelector('.list-shadow');
+
+    setTimeout(() => {
+      removeClass('p-2')(innerDiv);
+      removeClass('opacity-0')(listShadow);
+      addClass('opacity-100')(listShadow);
+    }, 0);
+  }
+});
+
+// Handle drop
+onDragEnd.bind(activeLists)((e) => {
+  if (getClassList(e.target).includes('list')) {
+    const list = e.target;
+    const innerDiv = list.querySelector('div');
+    addClass('p-2')(innerDiv);
+    const listShadow = innerDiv.querySelector('.list-shadow');
+    removeClass('opacity-100')(listShadow);
+    addClass('opacity-0')(listShadow);
+  }
+});

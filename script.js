@@ -198,7 +198,7 @@ onDrag.bind(activeLists)((e) => {
   }
 });
 
-// Handle drop
+// Handle drag end
 onDragEnd.bind(activeLists)((e) => {
   if (getClassList(e.target).includes('list')) {
     const list = e.target;

@@ -33,6 +33,48 @@ const getClassList = (el) => {
   return [...el.classList];
 };
 
+// =====================================================================
+
+const addNewList = (parentEl, title) => {
+  const li = document.createElement('li');
+  li.className =
+    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start';
+
+  const listH2 = document.createElement('h2');
+  listH2.setAttribute('tabindex', '0');
+  listH2.className =
+    'px-3 py-2 font-semibold rounded-md cursor-pointer list-title';
+  listH2.textContent = title;
+
+  const titleInput = document.createElement('input');
+  titleInput.setAttribute('type', 'text');
+  titleInput.className =
+    'hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input';
+
+  const listHeader = document.createElement('header');
+  listHeader.appendChild(listH2);
+  listHeader.appendChild(titleInput);
+
+  const ul = document.createElement('ul');
+  ul.className = 'space-y-2';
+
+  const div = document.createElement('div');
+  div.className = 'py-1';
+
+  const addCardBtn = document.createElement('button');
+  addCardBtn.className =
+    'w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]';
+  addCardBtn.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
+  div.appendChild(addCardBtn);
+
+  li.appendChild(listHeader);
+  li.appendChild(ul);
+  li.appendChild(div);
+
+  parentEl.appendChild(li);
+};
+
 const showEditTitleInput = (el) => {
   const listTitle = el;
 
@@ -89,46 +131,8 @@ onSubmit.bind(addListForm)((e) => {
   const value = input.value;
   if (!value) return;
 
-  // add list
-  const li = document.createElement('li');
-  li.className =
-    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start';
+  addNewList(activeLists, value);
 
-  const listH2 = document.createElement('h2');
-  listH2.setAttribute('tabindex', '0');
-  listH2.className =
-    'px-3 py-2 font-semibold rounded-md cursor-pointer list-title';
-  listH2.textContent = value;
-
-  const titleInput = document.createElement('input');
-  titleInput.setAttribute('type', 'text');
-  titleInput.className =
-    'hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input';
-
-  const listHeader = document.createElement('header');
-  listHeader.appendChild(listH2);
-  listHeader.appendChild(titleInput);
-
-  const ul = document.createElement('ul');
-  ul.className = 'space-y-2';
-
-  const div = document.createElement('div');
-  div.className = 'py-1';
-
-  const addCardBtn = document.createElement('button');
-  addCardBtn.className =
-    'w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]';
-  addCardBtn.innerHTML =
-    '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
-  div.appendChild(addCardBtn);
-
-  li.appendChild(listHeader);
-  li.appendChild(ul);
-  li.appendChild(div);
-
-  activeLists.appendChild(li);
-
-  // clear input
   input.value = '';
 });
 

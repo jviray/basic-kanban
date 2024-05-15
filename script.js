@@ -15,6 +15,8 @@ const onSubmit = handleEvent('submit');
 const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
 const onKeyUp = handleEvent('keyup');
+const onDrag = handleEvent('dragstart');
+const onDrop = handleEvent('dragend');
 
 // Assumes using tailwind
 const hide = (el) => {
@@ -41,8 +43,16 @@ const addNewList = (parentEl, title) => {
   const li = document.createElement('li');
   li.setAttribute('draggable', 'true');
   li.className =
-    // relative + z-index removec parent-bg when dragging element
-    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start relative z-[1]';
+    // relative + z-index removes parent bg when dragging element
+    'w-[272px] self-start relative z-[1]';
+
+  const innerLiDiv = document.createElement('div');
+  innerLiDiv.className =
+    'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
+
+  const shadowDiv = document.createElement('div');
+  shadowDiv.hidden = true;
+  shadowDiv.className = 'absolute w-full h-full rounded-xl bg-[#504d4d]';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
@@ -72,10 +82,12 @@ const addNewList = (parentEl, title) => {
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
   div.appendChild(addCardBtn);
 
-  li.appendChild(listHeader);
-  li.appendChild(ul);
-  li.appendChild(div);
+  innerLiDiv.appendChild(shadowDiv);
+  innerLiDiv.appendChild(listHeader);
+  innerLiDiv.appendChild(ul);
+  innerLiDiv.appendChild(div);
 
+  li.appendChild(innerLiDiv);
   parentEl.appendChild(li);
 };
 
@@ -173,3 +185,5 @@ onKeyUp.bind(activeLists)((e) => {
     setTitle(e.target);
   }
 });
+
+// Handle drag

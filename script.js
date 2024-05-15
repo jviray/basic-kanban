@@ -9,6 +9,7 @@ function handleEvent(eventName) {
 }
 
 const onClick = handleEvent('click');
+const onMouseUp = handleEvent('mouseup');
 const onSubmit = handleEvent('submit');
 const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
@@ -37,6 +38,7 @@ const getClassList = (el) => {
 
 const addNewList = (parentEl, title) => {
   const li = document.createElement('li');
+  li.setAttribute('draggable', 'true');
   li.className =
     'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start';
 
@@ -137,14 +139,14 @@ onSubmit.bind(addListForm)((e) => {
 });
 
 const activeLists = document.querySelector('#active-lists');
-onFocusIn.bind(activeLists)((e) => {
-  // Handle focus on list titles
-  if (getClassList(e.target).includes('list-title')) {
-    showEditTitleInput(e.target);
-  }
-});
+// onFocusIn.bind(activeLists)((e) => {
+//   // Handle focus on list titles
+//   if (getClassList(e.target).includes('list-title')) {
+//     showEditTitleInput(e.target);
+//   }
+// });
 
-onClick.bind(activeLists)((e) => {
+onMouseUp.bind(activeLists)((e) => {
   // Handle clicks on list titles
   if (getClassList(e.target).includes('list-title')) {
     showEditTitleInput(e.target);

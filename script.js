@@ -50,7 +50,7 @@ const addNewList = (parentEl, title) => {
   const shadowDiv = document.createElement('div');
   shadowDiv.hidden = true;
   shadowDiv.className =
-    'list-shadow absolute w-full h-full rounded-xl bg-[#787474]';
+    'list-shadow absolute w-full h-full rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf]';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');

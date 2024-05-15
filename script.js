@@ -10,6 +10,9 @@ function handleEvent(eventName) {
 
 const onClick = handleEvent('click');
 const onSubmit = handleEvent('submit');
+const onFocusIn = handleEvent('focusin');
+const onFocusOut = handleEvent('focusout');
+const onKeyUp = handleEvent('keyup');
 
 // Assumes using tailwind
 const hide = (el) => {
@@ -26,10 +29,51 @@ const unHide = (el) => {
     .join(' ');
 };
 
+const getClassList = (el) => {
+  return [...el.classList];
+};
+
+const showEditTitleInput = (el) => {
+  const listTitle = el;
+
+  // Important: Need to store for later possible use in setTitle()
+  recentCurrentTitle = listTitle.textContent.trim();
+
+  const listTitleInput =
+    listTitle.parentElement.querySelector('input[type="text"]');
+
+  hide(listTitle);
+  unHide(listTitleInput);
+
+  listTitleInput.focus();
+  listTitleInput.setAttribute('value', listTitle.textContent.trim());
+  listTitleInput.select();
+};
+
+const setTitle = (el) => {
+  const listTitleInput = el;
+  const listTitle = listTitleInput.parentElement.querySelector('h2');
+
+  hide(listTitleInput);
+  unHide(listTitle);
+
+  const inputValue = listTitleInput.value;
+
+  // If user enters empty value, use fallback recentCurrentTitle for both elements
+  listTitle.textContent = inputValue || recentCurrentTitle;
+  listTitleInput.value = inputValue || recentCurrentTitle;
+};
+
+// =====================================================================
+
+// State
+let recentCurrentTitle;
+
 const addListBtn = document.querySelector('#add-list-btn');
 onClick.bind(addListBtn)((e) => {
   hide(addListBtn);
   unHide(addListForm);
+  addListForm.querySelector('input[type="text"]').focus();
 });
 
 const cancelAddListBtn = document.querySelector('#cancel-add-list-btn');
@@ -47,3 +91,34 @@ onSubmit.bind(addListForm)((e) => {
 });
 
 const activeLists = document.querySelector('#active-lists');
+onFocusIn.bind(activeLists)((e) => {
+  // Handle focus on list titles
+  if (getClassList(e.target).includes('list-title')) {
+    showEditTitleInput(e.target);
+  }
+});
+
+onClick.bind(activeLists)((e) => {
+  // Handle clicks on list titles
+  if (getClassList(e.target).includes('list-title')) {
+    showEditTitleInput(e.target);
+  }
+});
+
+onFocusOut.bind(activeLists)((e) => {
+  // Set title when input loses focus
+  if (getClassList(e.target).includes('edit-list-title-input')) {
+    setTitle(e.target);
+  }
+});
+
+onKeyUp.bind(activeLists)((e) => {
+  // Handle `enter` event on edit list title input
+  // https://stackoverflow.com/questions/71111186/how-to-press-the-enter-key-inside-an-input-field-with-pure-javascript-or-jquery
+  if (
+    getClassList(e.target).includes('edit-list-title-input') &&
+    e.keyCode === 13
+  ) {
+    setTitle(e.target);
+  }
+});

@@ -18,18 +18,18 @@
         <ul id="active-lists" class="flex gap-4">
           <!-- List -->
           <li class="bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2">
-            <div class="relative">
+            <header>
               <h2
                 tabindex="0"
-                class="px-3 py-2 font-semibold rounded-md cursor-pointer"
+                class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
               >
                 Capture
               </h2>
               <input
                 type="text"
-                class="hidden w-full px-3 py-2 font-semibold rounded-md"
+                class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
               />
-            </div>
+            </header>
             <ul class="border border-black">
               Cards
             </ul>
@@ -90,7 +90,6 @@
             <input
               type="text"
               class="w-full px-3 py-2 rounded-md border-[1px] border-gray-400"
-              autofocus
               placeholder="Enter list title..."
             />
 

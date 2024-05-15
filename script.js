@@ -40,7 +40,8 @@ const addNewList = (parentEl, title) => {
   const li = document.createElement('li');
   li.setAttribute('draggable', 'true');
   li.className =
-    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start';
+    // relative + z-index removec parent-bg when dragging element
+    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start relative z-[1]';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');

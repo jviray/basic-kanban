@@ -9,6 +9,7 @@ function handleEvent(eventName) {
 }
 
 const onClick = handleEvent('click');
+const onMouseDown = handleEvent('mousedown');
 const onMouseUp = handleEvent('mouseup');
 const onSubmit = handleEvent('submit');
 const onFocusIn = handleEvent('focusin');
@@ -140,15 +141,9 @@ onSubmit.bind(addListForm)((e) => {
 });
 
 const activeLists = document.querySelector('#active-lists');
-// onFocusIn.bind(activeLists)((e) => {
-//   // Handle focus on list titles
-//   if (getClassList(e.target).includes('list-title')) {
-//     showEditTitleInput(e.target);
-//   }
-// });
 
 onMouseUp.bind(activeLists)((e) => {
-  // Handle clicks on list titles
+  // Handle clicks on list titles (i.e. only focus on input if user is clicking, not when holding to drag)
   if (getClassList(e.target).includes('list-title')) {
     showEditTitleInput(e.target);
   }
@@ -162,6 +157,13 @@ onFocusOut.bind(activeLists)((e) => {
 });
 
 onKeyUp.bind(activeLists)((e) => {
+  // Handle `tab` event on title
+  // This is required, to trigger input when title focued on with tab;
+  // couldn't use normal focusin because that conflicted w/ dragging feature
+  if (getClassList(e.target).includes('list-title') && e.keyCode === 9) {
+    showEditTitleInput(e.target);
+  }
+
   // Handle `enter` event on edit list title input
   // https://stackoverflow.com/questions/71111186/how-to-press-the-enter-key-inside-an-input-field-with-pure-javascript-or-jquery
   if (

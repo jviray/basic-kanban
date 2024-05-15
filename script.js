@@ -1,19 +1,19 @@
 // Must use normal function because of `this`.
 // Must also bind to element before calling.
-function onClick(fn) {
-  this.addEventListener('click', (event) => {
-    fn(event);
-  });
+function handleEvent(eventName) {
+  return function (fn) {
+    this.addEventListener(eventName, (event) => {
+      fn(event);
+    });
+  };
 }
 
-function onSubmit(fn) {
-  this.addEventListener('submit', (event) => {
-    fn(event);
-  });
-}
+const onClick = handleEvent('click');
+const onSubmit = handleEvent('submit');
 
 // Assumes using tailwind
 const hide = (el) => {
+  // Alternative: Use hidden attribute (display: block)
   el.className += ' hidden';
 };
 
@@ -43,4 +43,7 @@ onSubmit.bind(addListForm)((e) => {
   e.preventDefault();
   const value = addListForm.querySelector('input[type="text"]').value;
   if (!value) return;
+  console.log(value);
 });
+
+const activeLists = document.querySelector('#active-lists');

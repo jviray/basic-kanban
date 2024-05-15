@@ -87,7 +87,38 @@ onSubmit.bind(addListForm)((e) => {
   e.preventDefault();
   const value = addListForm.querySelector('input[type="text"]').value;
   if (!value) return;
-  console.log(value);
+
+  // create and add list
+  // - li
+  // - header
+  // - ul
+  // - div (footer)
+
+  const li = document.createElement('li');
+  const listHeader = document.createElement('header');
+  const ul = document.createElement('ul');
+  const div = document.createElement('div');
+
+  li.className =
+    'bg-[rgb(241,242,244)] w-[272px] rounded-xl p-2 space-y-2 self-start';
+
+  const listH2 = document.createElement('h2');
+  listH2.setAttribute('tabindex', '0');
+  listH2.className =
+    'px-3 py-2 font-semibold rounded-md cursor-pointer list-title';
+  listH2.textContent = value;
+
+  const titleInput = document.createElement('input');
+  titleInput.setAttribute('type', 'text');
+  titleInput.className =
+    'hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input';
+
+  listHeader.appendChild(listH2);
+  listHeader.appendChild(titleInput);
+
+  li.appendChild(listHeader);
+
+  activeLists.appendChild(li);
 });
 
 const activeLists = document.querySelector('#active-lists');

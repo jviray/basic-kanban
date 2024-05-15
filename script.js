@@ -48,8 +48,9 @@ const addNewList = (parentEl, title) => {
     'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const shadowDiv = document.createElement('div');
+  shadowDiv.hidden = true;
   shadowDiv.className =
-    'list-shadow absolute w-full h-full rounded-xl bg-[#787474] opacity-0';
+    'list-shadow absolute w-full h-full rounded-xl bg-[#787474]';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
@@ -192,8 +193,7 @@ onDrag.bind(activeLists)((e) => {
 
     setTimeout(() => {
       removeClass('p-2')(innerDiv);
-      removeClass('opacity-0')(listShadow);
-      addClass('opacity-100')(listShadow);
+      listShadow.hidden = false;
     }, 0);
   }
 });
@@ -203,9 +203,9 @@ onDragEnd.bind(activeLists)((e) => {
   if (getClassList(e.target).includes('list')) {
     const list = e.target;
     const innerDiv = list.querySelector('div');
-    addClass('p-2')(innerDiv);
     const listShadow = innerDiv.querySelector('.list-shadow');
-    removeClass('opacity-100')(listShadow);
-    addClass('opacity-0')(listShadow);
+
+    addClass('p-2')(innerDiv);
+    listShadow.hidden = true;
   }
 });

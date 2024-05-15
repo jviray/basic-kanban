@@ -38,19 +38,22 @@ const getClassList = (el) => {
 
 const addNewList = (parentEl, title) => {
   const li = document.createElement('li');
-  li.setAttribute('draggable', 'true');
-  li.className =
-    // relative + z-index removes parent bg when dragging element
-    'list w-[272px] self-start relative z-[1]';
-
-  const innerLiDiv = document.createElement('div');
-  innerLiDiv.className =
-    'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
+  li.className = 'relative list-drop-zone';
 
   const shadowDiv = document.createElement('div');
   shadowDiv.hidden = true;
   shadowDiv.className =
-    'list-shadow absolute w-full h-full rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf]';
+    'absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf] z-[2]';
+
+  const draggableDiv = document.createElement('div');
+  draggableDiv.setAttribute('draggable', 'true');
+  draggableDiv.className =
+    // relative + z-index removes parent bg when dragging element
+    'list w-[272px] self-start relative z-[1]';
+
+  const innerDiv = document.createElement('div');
+  innerDiv.className =
+    'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
@@ -80,12 +83,15 @@ const addNewList = (parentEl, title) => {
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
   div.appendChild(addCardBtn);
 
-  innerLiDiv.appendChild(shadowDiv);
-  innerLiDiv.appendChild(listHeader);
-  innerLiDiv.appendChild(ul);
-  innerLiDiv.appendChild(div);
+  innerDiv.appendChild(listHeader);
+  innerDiv.appendChild(ul);
+  innerDiv.appendChild(div);
 
-  li.appendChild(innerLiDiv);
+  draggableDiv.appendChild(innerDiv);
+
+  li.appendChild(shadowDiv);
+  li.appendChild(draggableDiv);
+
   parentEl.appendChild(li);
 };
 
@@ -188,11 +194,10 @@ onKeyUp.bind(activeLists)((e) => {
 onDrag.bind(activeLists)((e) => {
   if (getClassList(e.target).includes('list')) {
     const list = e.target;
-    const innerDiv = list.querySelector('div');
-    const listShadow = innerDiv.querySelector('.list-shadow');
+    const dropZone = list.parentElement;
+    const listShadow = dropZone.querySelector('.list-shadow');
 
     setTimeout(() => {
-      removeClass('p-2')(innerDiv);
       listShadow.hidden = false;
     }, 0);
   }
@@ -202,10 +207,9 @@ onDrag.bind(activeLists)((e) => {
 onDragEnd.bind(activeLists)((e) => {
   if (getClassList(e.target).includes('list')) {
     const list = e.target;
-    const innerDiv = list.querySelector('div');
-    const listShadow = innerDiv.querySelector('.list-shadow');
+    const dropZone = list.parentElement;
+    const listShadow = dropZone.querySelector('.list-shadow');
 
-    addClass('p-2')(innerDiv);
     listShadow.hidden = true;
   }
 });

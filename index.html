@@ -15,216 +15,233 @@
       <div id="board" class="flex gap-4">
         <ul id="active-lists" class="flex gap-4">
           <!-- List -->
-          <li draggable="true" class="list w-[272px] self-start relative z-[1]">
+          <li class="relative list-drop-zone">
+            <!-- Shadow -->
             <div
-              class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              hidden
+              class="absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf] z-[2]"
+            ></div>
+
+            <div
+              draggable="true"
+              class="list w-[272px] self-start relative z-[1]"
             >
-              <!-- Shadow -->
               <div
-                hidden
-                class="absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf]"
-              ></div>
-
-              <header>
-                <h2
-                  tabindex="0"
-                  class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
-                >
-                  CAPTURE
-                </h2>
-                <input
-                  type="text"
-                  class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
-                />
-              </header>
-
-              <ul class="space-y-2">
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-              </ul>
-
-              <div class="py-1">
-                <button
-                  class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-plus"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="#44546f"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              >
+                <header>
+                  <h2
+                    tabindex="0"
+                    class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
                   >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 5l0 14" />
-                    <path d="M5 12l14 0" />
-                  </svg>
-                  <span> Add a card </span>
-                </button>
+                    CAPTURE
+                  </h2>
+                  <input
+                    type="text"
+                    class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
+                  />
+                </header>
+
+                <ul class="space-y-2">
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+                </ul>
+
+                <div class="py-1">
+                  <button
+                    class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-plus"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="#44546f"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 5l0 14" />
+                      <path d="M5 12l14 0" />
+                    </svg>
+                    <span> Add a card </span>
+                  </button>
+                </div>
               </div>
             </div>
           </li>
 
-          <li draggable="true" class="list w-[272px] self-start relative z-[1]">
+          <li class="relative list-drop-zone">
+            <!-- Shadow -->
             <div
-              class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              hidden
+              class="absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf] z-[2]"
+            ></div>
+
+            <div
+              draggable="true"
+              class="list w-[272px] self-start relative z-[1]"
             >
-              <!-- Shadow -->
               <div
-                hidden
-                class="list-shadow absolute w-full h-full rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf]"
-              ></div>
-
-              <header>
-                <h2
-                  tabindex="0"
-                  class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
-                >
-                  ON DECK
-                </h2>
-                <input
-                  type="text"
-                  class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
-                />
-              </header>
-
-              <ul class="space-y-2">
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-              </ul>
-
-              <div class="py-1">
-                <button
-                  class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-plus"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="#44546f"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              >
+                <header>
+                  <h2
+                    tabindex="0"
+                    class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
                   >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 5l0 14" />
-                    <path d="M5 12l14 0" />
-                  </svg>
-                  <span> Add a card </span>
-                </button>
+                    ON DECK
+                  </h2>
+                  <input
+                    type="text"
+                    class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
+                  />
+                </header>
+
+                <ul class="space-y-2">
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+                </ul>
+
+                <div class="py-1">
+                  <button
+                    class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-plus"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="#44546f"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 5l0 14" />
+                      <path d="M5 12l14 0" />
+                    </svg>
+                    <span> Add a card </span>
+                  </button>
+                </div>
               </div>
             </div>
           </li>
 
-          <li draggable="true" class="list w-[272px] self-start relative z-[1]">
+          <li class="relative list-drop-zone">
+            <!-- Shadow -->
             <div
-              class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              hidden
+              class="absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf] z-[2]"
+            ></div>
+
+            <div
+              draggable="true"
+              class="list w-[272px] self-start relative z-[1]"
             >
-              <!-- Shadow -->
               <div
-                hidden
-                class="list-shadow absolute w-full h-full rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf]"
-              ></div>
-
-              <header>
-                <h2
-                  tabindex="0"
-                  class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
-                >
-                  DOING
-                </h2>
-                <input
-                  type="text"
-                  class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
-                />
-              </header>
-
-              <ul class="space-y-2">
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-
-                <li
-                  class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Totam, optio provident. Facilis.
-                </li>
-              </ul>
-
-              <div class="py-1">
-                <button
-                  class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-plus"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="#44546f"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                class="w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2"
+              >
+                <header>
+                  <h2
+                    tabindex="0"
+                    class="px-3 py-2 font-semibold rounded-md cursor-pointer list-title"
                   >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 5l0 14" />
-                    <path d="M5 12l14 0" />
-                  </svg>
-                  <span> Add a card </span>
-                </button>
+                    DOING
+                  </h2>
+                  <input
+                    type="text"
+                    class="hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input"
+                  />
+                </header>
+
+                <ul class="space-y-2">
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+
+                  <li
+                    class="px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Totam, optio provident. Facilis.
+                  </li>
+                </ul>
+
+                <div class="py-1">
+                  <button
+                    class="w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-plus"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="#44546f"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 5l0 14" />
+                      <path d="M5 12l14 0" />
+                    </svg>
+                    <span> Add a card </span>
+                  </button>
+                </div>
               </div>
             </div>
           </li>

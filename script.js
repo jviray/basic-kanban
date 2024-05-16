@@ -45,14 +45,14 @@ const getClassList = (el) => {
 // =====================================================================
 
 const addNewList = (parentEl, title) => {
-  const li = document.createElement('li');
-  li.className = 'w-full h-full list-drop-zone rounded-xl';
+  const listDropArea = document.createElement('li');
+  listDropArea.className = 'w-full h-full list-drop-area rounded-xl';
 
-  const listContainer = document.createElement('div');
-  listContainer.setAttribute('draggable', 'true');
-  listContainer.className =
+  const list = document.createElement('div');
+  list.setAttribute('draggable', 'true');
+  list.className =
     // relative + z-index removes parent bg when dragging element
-    'list-container w-[272px] self-start relative z-[1] bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
+    'draggable-list w-[272px] self-start relative z-[1] bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
@@ -69,26 +69,26 @@ const addNewList = (parentEl, title) => {
   listHeader.appendChild(listH2);
   listHeader.appendChild(titleInput);
 
-  const ul = document.createElement('ul');
-  ul.className = 'space-y-2';
+  const cardList = document.createElement('ul');
+  cardList.className = 'space-y-2';
 
-  const div = document.createElement('div');
-  div.className = 'py-1';
+  const listFooter = document.createElement('div');
+  listFooter.className = 'py-1';
 
   const addCardBtn = document.createElement('button');
   addCardBtn.className =
     'w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]';
   addCardBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
-  div.appendChild(addCardBtn);
+  listFooter.appendChild(addCardBtn);
 
-  listContainer.appendChild(listHeader);
-  listContainer.appendChild(ul);
-  listContainer.appendChild(div);
+  list.appendChild(listHeader);
+  list.appendChild(cardList);
+  list.appendChild(listFooter);
 
-  li.appendChild(listContainer);
+  listDropArea.appendChild(list);
 
-  parentEl.appendChild(li);
+  parentEl.appendChild(listDropArea);
 };
 
 const showEditTitleInput = (el) => {
@@ -188,34 +188,34 @@ onKeyUp.bind(activeLists)((e) => {
 
 // Handle drag
 onDrag.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('list-container')) {
-    const li = e.target.parentElement;
-    const listContainer = e.target;
+  if (getClassList(e.target).includes('draggable-list')) {
+    const listDropArea = e.target.parentElement;
+    const list = e.target;
 
     addClasses([
       'bg-gradient-to-b',
       'from-[#908c8c]',
       'to-[#0079bf]',
       'to-35%',
-    ])(li);
+    ])(listDropArea);
     setTimeout(() => {
-      addClasses('invisible')(listContainer);
+      addClasses('invisible')(list);
     }, 0);
   }
 });
 
 // Handle drag end
 onDragEnd.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('list-container')) {
-    const li = e.target.parentElement;
-    const listContainer = e.target;
+  if (getClassList(e.target).includes('draggable-list')) {
+    const listDropArea = e.target.parentElement;
+    const list = e.target;
 
     removeClasses([
       'bg-gradient-to-b',
       'from-[#908c8c]',
       'to-[#0079bf]',
       'to-35%',
-    ])(li);
-    removeClasses('invisible')(listContainer);
+    ])(listDropArea);
+    removeClasses('invisible')(list);
   }
 });

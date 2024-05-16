@@ -192,7 +192,7 @@ onKeyUp.bind(activeLists)((e) => {
 const lists = document.querySelectorAll('.draggable-list');
 for (const list of lists) {
   onDragStart.bind(list)((e) => {
-    list.setAttribute('id', 'dragging-list');
+    list.setAttribute('id', 'dragging-element');
     addClasses('opacity-[.4]')(list);
   });
 
@@ -202,11 +202,25 @@ for (const list of lists) {
   });
 }
 
+// Handle dragging over
 const listDropAreas = document.querySelectorAll('.list-drop-area');
 for (const listDropArea of [...listDropAreas]) {
   onDragOver.bind(listDropArea)((e) => {
     e.preventDefault();
-    const draggingList = document.getElementById('dragging-list');
-    listDropArea.appendChild(draggingList);
+    const eventCatchingElement = listDropArea; // cardDropArea for cards
+    const parentDropArea = eventCatchingElement.parentElement;
+    const draggingElement = document.getElementById('dragging-element');
+
+    const nextAdjacentElement = getNextAdjacentElement(
+      parentDropArea,
+      e.clientX
+    ); // Y for card
+    // ...
+
+    eventCatchingElement.appendChild(draggingElement);
   });
 }
+
+const getNextAdjacentElement = (parentDropArea, draggingPos) => {
+  // ...
+};

@@ -31,7 +31,7 @@ const onSubmit = handleEvent('submit');
 const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
 const onKeyUp = handleEvent('keyup');
-const onDrag = handleEvent('dragstart');
+const onDragStart = handleEvent('dragstart');
 const onDragEnd = handleEvent('dragend');
 
 // Assumes using tailwind
@@ -187,35 +187,15 @@ onKeyUp.bind(activeLists)((e) => {
 });
 
 // Handle drag
-onDrag.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('draggable-list')) {
-    const listDropArea = e.target.parentElement;
-    const list = e.target;
+const lists = document.querySelectorAll('.draggable-list');
+for (const list of lists) {
+  onDragStart.bind(list)((e) => {
+    list.setAttribute('id', 'dragging-list');
+    addClasses(['opacity-[.4]', 'cursor-grabbing'])(list);
+  });
 
-    addClasses([
-      'bg-gradient-to-b',
-      'from-[#908c8c]',
-      'to-[#0079bf]',
-      'to-35%',
-    ])(listDropArea);
-    setTimeout(() => {
-      addClasses('invisible')(list);
-    }, 0);
-  }
-});
-
-// Handle drag end
-onDragEnd.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('draggable-list')) {
-    const listDropArea = e.target.parentElement;
-    const list = e.target;
-
-    removeClasses([
-      'bg-gradient-to-b',
-      'from-[#908c8c]',
-      'to-[#0079bf]',
-      'to-35%',
-    ])(listDropArea);
-    removeClasses('invisible')(list);
-  }
-});
+  onDragEnd.bind(list)((e) => {
+    list.removeAttribute('id');
+    removeClasses(['opacity-[.4]', 'cursor-grabbing'])(list);
+  });
+}

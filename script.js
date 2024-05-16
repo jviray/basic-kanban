@@ -8,12 +8,20 @@ function handleEvent(eventName) {
   };
 }
 
-const addClass = (classToAdd) => (el) => {
-  el.classList.add(classToAdd);
+const addClasses = (classes) => (el) => {
+  if (Array.isArray(classes)) {
+    el.classList.add(...classes);
+  }
+
+  el.classList.add(classes);
 };
 
-const removeClass = (classToRemove) => (el) => {
-  el.classList.remove(classToRemove);
+const removeClasses = (classes) => (el) => {
+  if (Array.isArray(classes)) {
+    el.classList.remove(...classes);
+  }
+
+  el.classList.remove(classes);
 };
 
 const onClick = handleEvent('click');
@@ -27,8 +35,8 @@ const onDrag = handleEvent('dragstart');
 const onDragEnd = handleEvent('dragend');
 
 // Assumes using tailwind
-const hide = addClass('hidden');
-const unHide = removeClass('hidden');
+const hide = addClasses('hidden');
+const unHide = removeClasses('hidden');
 
 const getClassList = (el) => {
   return [...el.classList];
@@ -38,22 +46,13 @@ const getClassList = (el) => {
 
 const addNewList = (parentEl, title) => {
   const li = document.createElement('li');
-  li.className = 'relative list-drop-zone';
+  li.className = 'w-full h-full list-drop-zone rounded-xl';
 
-  const shadowDiv = document.createElement('div');
-  shadowDiv.hidden = true;
-  shadowDiv.className =
-    'absolute w-full h-full list-shadow rounded-xl bg-gradient-to-b from-[#908c8c] to-[#0079bf] to-35% z-[2]';
-
-  const draggableDiv = document.createElement('div');
-  draggableDiv.setAttribute('draggable', 'true');
-  draggableDiv.className =
+  const listContainer = document.createElement('div');
+  listContainer.setAttribute('draggable', 'true');
+  listContainer.className =
     // relative + z-index removes parent bg when dragging element
-    'list w-[272px] self-start relative z-[1]';
-
-  const innerDiv = document.createElement('div');
-  innerDiv.className =
-    'w-full absolute bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
+    'list-container w-[272px] self-start relative z-[1] bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
@@ -83,14 +82,11 @@ const addNewList = (parentEl, title) => {
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
   div.appendChild(addCardBtn);
 
-  innerDiv.appendChild(listHeader);
-  innerDiv.appendChild(ul);
-  innerDiv.appendChild(div);
+  listContainer.appendChild(listHeader);
+  listContainer.appendChild(ul);
+  listContainer.appendChild(div);
 
-  draggableDiv.appendChild(innerDiv);
-
-  li.appendChild(shadowDiv);
-  li.appendChild(draggableDiv);
+  li.appendChild(listContainer);
 
   parentEl.appendChild(li);
 };
@@ -192,24 +188,34 @@ onKeyUp.bind(activeLists)((e) => {
 
 // Handle drag
 onDrag.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('list')) {
-    const list = e.target;
-    const dropZone = list.parentElement;
-    const listShadow = dropZone.querySelector('.list-shadow');
+  if (getClassList(e.target).includes('list-container')) {
+    const li = e.target.parentElement;
+    const listContainer = e.target;
 
+    addClasses([
+      'bg-gradient-to-b',
+      'from-[#908c8c]',
+      'to-[#0079bf]',
+      'to-35%',
+    ])(li);
     setTimeout(() => {
-      listShadow.hidden = false;
+      addClasses('invisible')(listContainer);
     }, 0);
   }
 });
 
 // Handle drag end
 onDragEnd.bind(activeLists)((e) => {
-  if (getClassList(e.target).includes('list')) {
-    const list = e.target;
-    const dropZone = list.parentElement;
-    const listShadow = dropZone.querySelector('.list-shadow');
+  if (getClassList(e.target).includes('list-container')) {
+    const li = e.target.parentElement;
+    const listContainer = e.target;
 
-    listShadow.hidden = true;
+    removeClasses([
+      'bg-gradient-to-b',
+      'from-[#908c8c]',
+      'to-[#0079bf]',
+      'to-35%',
+    ])(li);
+    removeClasses('invisible')(listContainer);
   }
 });

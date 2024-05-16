@@ -2,7 +2,7 @@
 // Must also bind to element before calling.
 function handleEvent(eventName) {
   return function (fn) {
-    this.addEventListener(eventName, (event) => {
+    this.addEventListener(eventName, function (event) {
       fn(event);
     });
   };
@@ -32,6 +32,7 @@ const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
 const onKeyUp = handleEvent('keyup');
 const onDragStart = handleEvent('dragstart');
+const onDragOver = handleEvent('dragover');
 const onDragEnd = handleEvent('dragend');
 
 // Assumes using tailwind
@@ -191,11 +192,15 @@ const lists = document.querySelectorAll('.draggable-list');
 for (const list of lists) {
   onDragStart.bind(list)((e) => {
     list.setAttribute('id', 'dragging-list');
-    addClasses(['opacity-[.4]', 'cursor-grabbing'])(list);
+    addClasses('opacity-[.4]')(list);
   });
 
   onDragEnd.bind(list)((e) => {
     list.removeAttribute('id');
-    removeClasses(['opacity-[.4]', 'cursor-grabbing'])(list);
+    removeClasses('opacity-[.4]')(list);
   });
+}
+
+const listDropAreas = document.querySelectorAll('.list-drop-area');
+for (const listDropArea of listDropAreas) {
 }

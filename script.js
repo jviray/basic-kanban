@@ -43,7 +43,7 @@ const addNewList = (parentEl, title) => {
   const shadowDiv = document.createElement('div');
   shadowDiv.hidden = true;
   shadowDiv.className =
-    'absolute w-full h-[30vh] list-shadow rounded-xl bg-gradient-to-b from-[#505050] to-[#0079bf] z-[2]';
+    'absolute w-full h-full list-shadow rounded-xl bg-gradient-to-b from-[#908c8c] to-[#0079bf] to-35% z-[2]';
 
   const draggableDiv = document.createElement('div');
   draggableDiv.setAttribute('draggable', 'true');

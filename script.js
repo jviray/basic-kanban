@@ -202,25 +202,69 @@ for (const list of lists) {
   });
 }
 
-// Handle dragging over
-const listDropAreas = document.querySelectorAll('.list-drop-area');
-for (const listDropArea of [...listDropAreas]) {
-  onDragOver.bind(listDropArea)((e) => {
-    e.preventDefault();
-    const eventCatchingElement = listDropArea; // cardDropArea for cards
-    const parentDropArea = eventCatchingElement.parentElement;
-    const draggingElement = document.getElementById('dragging-element');
+onDragOver.bind(activeLists)((e) => {
+  e.preventDefault();
+  const nextList = insertBeforeList(activeLists, e.clientX);
+  const draggingList = document.querySelector('#dragging-element');
 
-    const nextAdjacentElement = getNextAdjacentElement(
-      parentDropArea,
-      e.clientX
-    ); // Y for card
-    // ...
+  // Moving Right
+  // if (!nextList) {
+  //   activeLists.appendChild(draggingList.parentElement);
+  // } else {
+  //   activeLists.insertBefore(
+  //     draggingList.parentElement,
+  //     nextList.parentElement
+  //   );
+  // }
 
-    eventCatchingElement.appendChild(draggingElement);
+  // Moving Left
+  if (!nextList) {
+    activeLists.prepend(draggingList.parentElement);
+  } else {
+    activeLists.insertBefore(
+      draggingList.parentElement,
+      nextList.parentElement.nextSibling
+    );
+  }
+});
+
+const insertBeforeList = (sortingParent, mouseX) => {
+  // Get all lists except the one dragging
+  const lists = sortingParent.querySelectorAll(
+    '.draggable-list:not(#dragging-element)'
+  );
+
+  // Moving Right
+  // let closestList = null;
+  // let closestOffset = Number.NEGATIVE_INFINITY;
+
+  // lists.forEach((list) => {
+  //   // Get x-axis position of left side of list
+  //   const { left } = list.getBoundingClientRect();
+  //   const offset = mouseX - left;
+
+  //   if (offset < 0 && offset > closestOffset) {
+  //     // This is closest list
+  //     closestList = list;
+  //     closestOffset = offset;
+  //   }
+  // });
+
+  // Moving Left
+  let closestList = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+
+  lists.forEach((list) => {
+    // Get x-axis position of right side of list
+    const { right } = list.getBoundingClientRect();
+    const offset = right - mouseX;
+
+    if (offset < 0 && offset > closestOffset) {
+      // This is closest list
+      closestList = list;
+      closestOffset = offset;
+    }
   });
-}
 
-const getNextAdjacentElement = (parentDropArea, draggingPos) => {
-  // ...
+  return closestList;
 };

@@ -204,67 +204,97 @@ for (const list of lists) {
 
 onDragOver.bind(activeLists)((e) => {
   e.preventDefault();
-  const nextList = insertBeforeList(activeLists, e.clientX);
+  const { closestLists, offsets } = getClosestList(activeLists, e.clientX);
   const draggingList = document.querySelector('#dragging-element');
 
-  // Moving Right
-  // if (!nextList) {
-  //   activeLists.appendChild(draggingList.parentElement);
-  // } else {
-  //   activeLists.insertBefore(
-  //     draggingList.parentElement,
-  //     nextList.parentElement
-  //   );
-  // }
+  if (closestLists.left && closestLists.right) {
+    // Choose between two whichever closest
+    let nextList;
+    if (offsets.left > offsets.right) {
+      console.log('left');
+      nextList = closestLists.left;
 
-  // Moving Left
-  if (!nextList) {
-    activeLists.prepend(draggingList.parentElement);
-  } else {
-    activeLists.insertBefore(
-      draggingList.parentElement,
-      nextList.parentElement.nextSibling
-    );
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestLists.left.parentElement
+      );
+    } else if (offsets.left < offsets.right) {
+      console.log('right');
+      nextList = closestLists.right;
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestLists.right.parentElement.nextSibling
+      );
+    }
+  } else if (closestLists.left) {
+    // Shift left
+    console.log('only left');
+
+    // Need to do equivalent of prepending to the start
+
+    if (draggingList.parentElement === activeLists.children[1]) {
+      activeLists.prepend(draggingList.parentElement);
+    } else {
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestLists.left.parentElement
+      );
+    }
+  } else if (closestLists.right) {
+    console.log('only right');
+    // Shift right
+
+    // Need to do equivalent of prepending to the start
+
+    if (
+      draggingList.parentElement ===
+      activeLists.children[activeLists.children.length - 2] // Check if second to last!
+    ) {
+      activeLists.append(draggingList.parentElement);
+    } else {
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestLists.right.parentElement.nextSibling
+      );
+    }
   }
 });
 
-const insertBeforeList = (sortingParent, mouseX) => {
+const getClosestList = (sortingParent, mousePositionX) => {
   // Get all lists except the one dragging
   const lists = sortingParent.querySelectorAll(
     '.draggable-list:not(#dragging-element)'
   );
 
-  // Moving Right
-  // let closestList = null;
-  // let closestOffset = Number.NEGATIVE_INFINITY;
+  let closestLists = {
+    left: null,
+    right: null,
+  };
 
-  // lists.forEach((list) => {
-  //   // Get x-axis position of left side of list
-  //   const { left } = list.getBoundingClientRect();
-  //   const offset = mouseX - left;
-
-  //   if (offset < 0 && offset > closestOffset) {
-  //     // This is closest list
-  //     closestList = list;
-  //     closestOffset = offset;
-  //   }
-  // });
-
-  // Moving Left
-  let closestList = null;
-  let closestOffset = Number.NEGATIVE_INFINITY;
+  let offsets = {
+    left: Number.NEGATIVE_INFINITY,
+    right: Number.NEGATIVE_INFINITY,
+  };
 
   lists.forEach((list) => {
-    // Get x-axis position of right side of list
-    const { right } = list.getBoundingClientRect();
-    const offset = right - mouseX;
+    // Get x-axis position of left side of list
+    const { left: leftSide, right: rightSide } = list.getBoundingClientRect();
 
-    if (offset < 0 && offset > closestOffset) {
-      // This is closest list
-      closestList = list;
-      closestOffset = offset;
+    // TODO Create helper function
+    const leftOffset = mousePositionX - leftSide;
+    if (leftOffset < 0 && leftOffset > offsets.left) {
+      // Set closest left list
+      closestLists.left = list;
+      offsets.left = leftOffset;
+    }
+
+    const rightOffset = rightSide - mousePositionX;
+    if (rightOffset < 0 && rightOffset > offsets.right) {
+      // Set closest right list
+      closestLists.right = list;
+      offsets.right = rightOffset;
     }
   });
 
-  return closestList;
+  return { closestLists, offsets };
 };

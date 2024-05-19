@@ -98,6 +98,11 @@ const addNewList = (parentEl, title) => {
   listDropArea.appendChild(list);
 
   parentEl.appendChild(listDropArea);
+
+  // Ensure activeLists container has proper spacing when children inside
+  if (parentEl.children.length > 0) {
+    parentEl.hidden = false;
+  }
 };
 
 const showEditTitleInput = (el) => {
@@ -206,6 +211,11 @@ onClick.bind(activeLists)((e) => {
   if (e.target.closest('button').id === 'delete-list-btn') {
     const list = e.target.closest('li');
     activeLists.removeChild(list);
+
+    // Hide activeLists div when no children (fixes spacing)
+    if (activeLists.children.length === 0) {
+      activeLists.hidden = true;
+    }
   }
 });
 

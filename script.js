@@ -68,28 +68,71 @@ const addNewList = (parentEl, title) => {
   headerDiv.appendChild(listH2);
   headerDiv.appendChild(titleInput);
 
-  const deleteCardeBtn = document.createElement('button');
-  deleteCardeBtn.setAttribute('id', 'delete-list-btn');
-  deleteCardeBtn.setAttribute('type', 'button');
-  deleteCardeBtn.className = 'p-1.5 rounded-md hover:bg-[#091e420f]';
-  deleteCardeBtn.innerHTML =
+  const deleteListBtn = document.createElement('button');
+  deleteListBtn.setAttribute('id', 'delete-list-btn');
+  deleteListBtn.setAttribute('type', 'button');
+  deleteListBtn.className = 'p-1.5 rounded-md hover:bg-[#091e420f]';
+  deleteListBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
 
   listHeader.appendChild(headerDiv);
-  listHeader.appendChild(deleteCardeBtn);
+  listHeader.appendChild(deleteListBtn);
 
   const cardList = document.createElement('ul');
   cardList.className = 'space-y-2';
 
   const listFooter = document.createElement('div');
-  listFooter.className = 'py-1';
+
+  const addCardForm = document.createElement('form');
+  addCardForm.className = 'hidden pb-2 space-y-2 add-card-form';
+
+  const newCardTextArea = document.createElement('textarea');
+  newCardTextArea.placeholder = 'Enter a title for this card...';
+  newCardTextArea.className =
+    'w-full px-3 py-2 text-left border border-gray-200 rounded-md shadow-md resize-none focus:outline-none';
+
+  const addCardFormFooter = document.createElement('div');
+  addCardFormFooter.className = 'flex items-center space-x-2';
+
+  const submitCardBtn = document.createElement('button');
+  submitCardBtn.setAttribute('type', 'submit');
+  submitCardBtn.className =
+    'confirm-add-card-btn bg-[#0c66e4] text-white py-1.5 px-3 font-semibold rounded-md';
+  submitCardBtn.textContent = 'Add card';
+
+  const cancelCardBtn = document.createElement('button');
+  cancelCardBtn.setAttribute('type', 'button');
+  cancelCardBtn.className =
+    'cancel-add-card-btn p-1.5 rounded-md hover:bg-[#091e420f]';
+  cancelCardBtn.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
+
+  addCardFormFooter.appendChild(submitCardBtn);
+  addCardFormFooter.appendChild(cancelCardBtn);
+
+  addCardForm.appendChild(newCardTextArea);
+  addCardForm.appendChild(addCardFormFooter);
+
+  const addCardBtnContainer = document.createElement('div');
+  addCardBtnContainer.className = 'py-1';
 
   const addCardBtn = document.createElement('button');
   addCardBtn.className =
-    'w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]';
+    'add-card-btn w-full px-3 py-2 rounded-xl font-[500] flex items-center space-x-2 text-[#44546f] hover:bg-[#091e420f]';
   addCardBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#44546f" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span> Add a card </span>';
-  listFooter.appendChild(addCardBtn);
+
+  onClick.bind(addCardBtn)((e) => {
+    hide(addCardBtn.parentElement);
+
+    const addCardForm = addCardBtn.parentElement.previousElementSibling;
+    unHide(addCardForm);
+  });
+
+  addCardBtnContainer.appendChild(addCardBtn);
+
+  listFooter.appendChild(addCardForm);
+  listFooter.appendChild(addCardBtnContainer);
 
   list.appendChild(listHeader);
   list.appendChild(cardList);
@@ -208,7 +251,7 @@ onClick.bind(activeLists)((e) => {
   }
 
   // Handle delete list via button
-  if (e.target.closest('button').id === 'delete-list-btn') {
+  if (e.target.closest('button')?.id === 'delete-list-btn') {
     const list = e.target.closest('li');
     activeLists.removeChild(list);
 
@@ -244,7 +287,7 @@ onKeyUp.bind(activeLists)((e) => {
   }
 });
 
-// Handle drag
+// Handle list drag
 onDragStart.bind(activeLists)((e) => {
   if (e.target.classList.contains('draggable-list')) {
     const list = e.target;
@@ -320,4 +363,15 @@ onDragOver.bind(activeLists)((e) => {
       );
     }
   }
+});
+
+// Delete later
+const addCardBtns = document.querySelectorAll('.add-card-btn');
+addCardBtns.forEach((addCardBtn) => {
+  onClick.bind(addCardBtn)((e) => {
+    hide(addCardBtn.parentElement);
+
+    const addCardForm = addCardBtn.parentElement.previousElementSibling;
+    unHide(addCardForm);
+  });
 });

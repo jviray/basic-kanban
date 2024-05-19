@@ -39,10 +39,6 @@ const onDragEnd = handleEvent('dragend');
 const hide = addClasses('hidden');
 const unHide = removeClasses('hidden');
 
-const getClassList = (el) => {
-  return [...el.classList];
-};
-
 // =====================================================================
 
 const addNewList = (parentEl, title) => {
@@ -193,17 +189,16 @@ onSubmit.bind(addListForm)((e) => {
 });
 
 const activeLists = document.querySelector('#active-lists');
-
 onClick.bind(activeLists)((e) => {
   // Handle clicks on list titles (i.e. only focus on input if user is clicking title area AND not when holding to drag)
-  if (getClassList(e.target).includes('list-title')) {
+  if (e.classList.contains('list-title')) {
     showEditTitleInput(e.target);
   }
 });
 
 onFocusOut.bind(activeLists)((e) => {
   // Set title when input loses focus
-  if (getClassList(e.target).includes('edit-list-title-input')) {
+  if (e.classList.contains('edit-list-title-input')) {
     setTitle(e.target);
   }
 });
@@ -212,14 +207,14 @@ onKeyUp.bind(activeLists)((e) => {
   // Handle `tab` event on title
   // This is required, to trigger input when title focued on with tab;
   // couldn't use normal focusin because that conflicted w/ dragging feature
-  if (getClassList(e.target).includes('list-title') && e.keyCode === 9) {
+  if (e.target.classList.contains('list-title') && e.keyCode === 9) {
     showEditTitleInput(e.target);
   }
 
   // Handle `enter` event on edit list title input
   // https://stackoverflow.com/questions/71111186/how-to-press-the-enter-key-inside-an-input-field-with-pure-javascript-or-jquery
   if (
-    getClassList(e.target).includes('edit-list-title-input') &&
+    e.target.classList.contains('edit-list-title-input') &&
     e.keyCode === 13
   ) {
     setTitle(e.target);

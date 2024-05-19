@@ -47,13 +47,12 @@ const getClassList = (el) => {
 
 const addNewList = (parentEl, title) => {
   const listDropArea = document.createElement('li');
-  listDropArea.className =
-    'w-[272px] h-full border border-black list-drop-area rounded-xl';
+  listDropArea.className = 'w-[272px] h-full list-drop-area rounded-xl';
 
   const list = document.createElement('div');
   list.setAttribute('draggable', 'true');
   list.className =
-    // relative + z-index removes parent bg when dragging element
+    // relative + z-index => removes parent bg when dragging element
     'draggable-list w-full self-start relative z-[1] bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
   const listH2 = document.createElement('h2');
@@ -156,8 +155,8 @@ onSubmit.bind(addListForm)((e) => {
 
 const activeLists = document.querySelector('#active-lists');
 
-onMouseUp.bind(activeLists)((e) => {
-  // Handle clicks on list titles (i.e. only focus on input if user is clicking, not when holding to drag)
+onClick.bind(activeLists)((e) => {
+  // Handle clicks on list titles (i.e. only focus on input if user is clicking title area AND not when holding to drag)
   if (getClassList(e.target).includes('list-title')) {
     showEditTitleInput(e.target);
   }

@@ -181,6 +181,21 @@ const setTitle = (el) => {
   listTitleInput.value = inputValue || recentCurrentTitle;
 };
 
+const addNewCard = (cardList, description) => {
+  const cardDropArea = document.createElement('li');
+  cardDropArea.className = 'rounded-md card-drop-area';
+
+  const card = document.createElement('div');
+  card.setAttribute('draggable', 'true');
+  card.className =
+    'px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md draggable-card relative z-[1]';
+  card.textContent = description;
+
+  cardDropArea.appendChild(card);
+
+  cardList.appendChild(cardDropArea);
+};
+
 const getClosestOption = (availableOptions, mousePositionX) => {
   let closestOption = {
     left: null,
@@ -380,7 +395,7 @@ addCardBtns.forEach((addCardBtn) => {
   });
 });
 
-// Handle submit
+// Handle click submit new card
 const addCardForm = document.querySelector('.add-card-form');
 onSubmit.bind(addCardForm)((e) => {
   e.preventDefault();
@@ -388,4 +403,10 @@ onSubmit.bind(addCardForm)((e) => {
   const textArea = addCardForm.querySelector('textarea');
   const value = textArea.value;
   if (!value) return;
+
+  const cardList = addCardForm.parentElement.previousElementSibling;
+  addNewCard(cardList, value);
+
+  textArea.focus();
+  textArea.value = '';
 });

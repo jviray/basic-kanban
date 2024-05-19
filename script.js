@@ -116,13 +116,8 @@ const setTitle = (el) => {
   listTitleInput.value = inputValue || recentCurrentTitle;
 };
 
-const getClosestList = (sortingParent, mousePositionX) => {
-  // Get all lists except the one dragging
-  const lists = sortingParent.querySelectorAll(
-    '.draggable-list:not(#dragging-element)'
-  );
-
-  let closestLists = {
+const getClosestOption = (availableOptions, mousePositionX) => {
+  let closestOption = {
     left: null,
     right: null,
   };
@@ -132,27 +127,27 @@ const getClosestList = (sortingParent, mousePositionX) => {
     right: Number.NEGATIVE_INFINITY,
   };
 
-  lists.forEach((list) => {
-    // Get x-axis position of left side of list
-    const { left: leftSide, right: rightSide } = list.getBoundingClientRect();
+  availableOptions.forEach((option) => {
+    // Get x-axis position of left side of option
+    const { left: leftSide, right: rightSide } = option.getBoundingClientRect();
 
     // TODO Create helper function
     const leftOffset = mousePositionX - leftSide;
     if (leftOffset < 0 && leftOffset > offsets.left) {
-      // Set closest left list
-      closestLists.left = list;
+      // Set closest left option
+      closestOption.left = option;
       offsets.left = leftOffset;
     }
 
     const rightOffset = rightSide - mousePositionX;
     if (rightOffset < 0 && rightOffset > offsets.right) {
-      // Set closest right list
-      closestLists.right = list;
+      // Set closest right option
+      closestOption.right = option;
       offsets.right = rightOffset;
     }
   });
 
-  return { closestLists, offsets };
+  return { closestOption, offsets };
 };
 
 // =====================================================================
@@ -188,14 +183,14 @@ onSubmit.bind(addListForm)((e) => {
 const activeLists = document.querySelector('#active-lists');
 onClick.bind(activeLists)((e) => {
   // Handle clicks on list titles (i.e. only focus on input if user is clicking title area AND not when holding to drag)
-  if (e.classList.contains('list-title')) {
+  if (e.target.classList.contains('list-title')) {
     showEditTitleInput(e.target);
   }
 });
 
 onFocusOut.bind(activeLists)((e) => {
   // Set title when input loses focus
-  if (e.classList.contains('edit-list-title-input')) {
+  if (e.target.classList.contains('edit-list-title-input')) {
     setTitle(e.target);
   }
 });
@@ -237,31 +232,35 @@ onDragEnd.bind(activeLists)((e) => {
 
 onDragOver.bind(activeLists)((e) => {
   e.preventDefault();
-  const { closestLists, offsets } = getClosestList(activeLists, e.clientX);
+  // Get all lists except the one dragging
+  const availableOptions = activeLists.querySelectorAll(
+    '.draggable-list:not(#dragging-element)'
+  );
+  const { closestOption, offsets } = getClosestOption(
+    availableOptions,
+    e.clientX
+  );
   const draggingList = document.querySelector('#dragging-element');
 
-  if (closestLists.left && closestLists.right) {
+  if (closestOption.left && closestOption.right) {
     // Choose between two whichever closest
     let nextList;
     if (offsets.left > offsets.right) {
-      console.log('left');
-      nextList = closestLists.left;
+      nextList = closestOption.left;
 
       activeLists.insertBefore(
         draggingList.parentElement,
-        closestLists.left.parentElement
+        closestOption.left.parentElement
       );
     } else if (offsets.left < offsets.right) {
-      console.log('right');
-      nextList = closestLists.right;
+      nextList = closestOption.right;
       activeLists.insertBefore(
         draggingList.parentElement,
-        closestLists.right.parentElement.nextSibling
+        closestOption.right.parentElement.nextSibling
       );
     }
-  } else if (closestLists.left) {
+  } else if (closestOption.left) {
     // Shift left
-    console.log('only left');
 
     // Need to do equivalent of prepending to the start
 
@@ -270,11 +269,10 @@ onDragOver.bind(activeLists)((e) => {
     } else {
       activeLists.insertBefore(
         draggingList.parentElement,
-        closestLists.left.parentElement
+        closestOption.left.parentElement
       );
     }
-  } else if (closestLists.right) {
-    console.log('only right');
+  } else if (closestOption.right) {
     // Shift right
 
     // Need to do equivalent of prepending to the start
@@ -287,7 +285,7 @@ onDragOver.bind(activeLists)((e) => {
     } else {
       activeLists.insertBefore(
         draggingList.parentElement,
-        closestLists.right.parentElement.nextSibling
+        closestOption.right.parentElement.nextSibling
       );
     }
   }

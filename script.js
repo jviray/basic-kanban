@@ -113,6 +113,20 @@ const addNewList = (parentEl, title) => {
   addCardForm.appendChild(newCardTextArea);
   addCardForm.appendChild(addCardFormFooter);
 
+  // Handle click submit new card
+  onSubmit.bind(addCardForm)((e) => {
+    e.preventDefault();
+
+    submitNewCard(addCardForm);
+  });
+
+  // Handle `enter` submit new card
+  onKeyUp.bind(addCardForm)((e) => {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      submitNewCard(addCardForm);
+    }
+  });
+
   const addCardBtnContainer = document.createElement('div');
   addCardBtnContainer.className = 'py-1';
 
@@ -194,6 +208,18 @@ const addNewCard = (cardList, description) => {
   cardDropArea.appendChild(card);
 
   cardList.appendChild(cardDropArea);
+};
+
+const submitNewCard = (form) => {
+  const textArea = form.querySelector('textarea');
+  const value = textArea.value;
+  if (!value) return;
+
+  const cardList = form.parentElement.previousElementSibling;
+  addNewCard(cardList, value);
+
+  textArea.focus();
+  textArea.value = '';
 };
 
 const getClosestOption = (availableOptions, mousePositionX) => {
@@ -395,18 +421,19 @@ addCardBtns.forEach((addCardBtn) => {
   });
 });
 
+// Delete later
 // Handle click submit new card
 const addCardForm = document.querySelector('.add-card-form');
 onSubmit.bind(addCardForm)((e) => {
   e.preventDefault();
 
-  const textArea = addCardForm.querySelector('textarea');
-  const value = textArea.value;
-  if (!value) return;
+  submitNewCard(addCardForm);
+});
 
-  const cardList = addCardForm.parentElement.previousElementSibling;
-  addNewCard(cardList, value);
-
-  textArea.focus();
-  textArea.value = '';
+// Delete later
+// Handle `enter` submit new card
+onKeyUp.bind(addCardForm)((e) => {
+  if (e.keyCode === 13 && !e.shiftKey) {
+    submitNewCard(addCardForm);
+  }
 });

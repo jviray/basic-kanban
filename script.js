@@ -123,6 +123,45 @@ const setTitle = (el) => {
   listTitleInput.value = inputValue || recentCurrentTitle;
 };
 
+const getClosestList = (sortingParent, mousePositionX) => {
+  // Get all lists except the one dragging
+  const lists = sortingParent.querySelectorAll(
+    '.draggable-list:not(#dragging-element)'
+  );
+
+  let closestLists = {
+    left: null,
+    right: null,
+  };
+
+  let offsets = {
+    left: Number.NEGATIVE_INFINITY,
+    right: Number.NEGATIVE_INFINITY,
+  };
+
+  lists.forEach((list) => {
+    // Get x-axis position of left side of list
+    const { left: leftSide, right: rightSide } = list.getBoundingClientRect();
+
+    // TODO Create helper function
+    const leftOffset = mousePositionX - leftSide;
+    if (leftOffset < 0 && leftOffset > offsets.left) {
+      // Set closest left list
+      closestLists.left = list;
+      offsets.left = leftOffset;
+    }
+
+    const rightOffset = rightSide - mousePositionX;
+    if (rightOffset < 0 && rightOffset > offsets.right) {
+      // Set closest right list
+      closestLists.right = list;
+      offsets.right = rightOffset;
+    }
+  });
+
+  return { closestLists, offsets };
+};
+
 // =====================================================================
 
 // State
@@ -188,18 +227,21 @@ onKeyUp.bind(activeLists)((e) => {
 });
 
 // Handle drag
-const lists = document.querySelectorAll('.draggable-list');
-for (const list of lists) {
-  onDragStart.bind(list)((e) => {
+onDragStart.bind(activeLists)((e) => {
+  if (e.target.classList.contains('draggable-list')) {
+    const list = e.target;
     list.setAttribute('id', 'dragging-element');
     addClasses('opacity-[.4]')(list);
-  });
+  }
+});
 
-  onDragEnd.bind(list)((e) => {
+onDragEnd.bind(activeLists)((e) => {
+  if (e.target.classList.contains('draggable-list')) {
+    const list = e.target;
     list.removeAttribute('id');
     removeClasses('opacity-[.4]')(list);
-  });
-}
+  }
+});
 
 onDragOver.bind(activeLists)((e) => {
   e.preventDefault();
@@ -258,42 +300,3 @@ onDragOver.bind(activeLists)((e) => {
     }
   }
 });
-
-const getClosestList = (sortingParent, mousePositionX) => {
-  // Get all lists except the one dragging
-  const lists = sortingParent.querySelectorAll(
-    '.draggable-list:not(#dragging-element)'
-  );
-
-  let closestLists = {
-    left: null,
-    right: null,
-  };
-
-  let offsets = {
-    left: Number.NEGATIVE_INFINITY,
-    right: Number.NEGATIVE_INFINITY,
-  };
-
-  lists.forEach((list) => {
-    // Get x-axis position of left side of list
-    const { left: leftSide, right: rightSide } = list.getBoundingClientRect();
-
-    // TODO Create helper function
-    const leftOffset = mousePositionX - leftSide;
-    if (leftOffset < 0 && leftOffset > offsets.left) {
-      // Set closest left list
-      closestLists.left = list;
-      offsets.left = leftOffset;
-    }
-
-    const rightOffset = rightSide - mousePositionX;
-    if (rightOffset < 0 && rightOffset > offsets.right) {
-      // Set closest right list
-      closestLists.right = list;
-      offsets.right = rightOffset;
-    }
-  });
-
-  return { closestLists, offsets };
-};

@@ -25,10 +25,7 @@ const removeClasses = (classes) => (el) => {
 };
 
 const onClick = handleEvent('click');
-const onMouseDown = handleEvent('mousedown');
-const onMouseUp = handleEvent('mouseup');
 const onSubmit = handleEvent('submit');
-const onFocusIn = handleEvent('focusin');
 const onFocusOut = handleEvent('focusout');
 const onKeyUp = handleEvent('keyup');
 const onDragStart = handleEvent('dragstart');

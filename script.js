@@ -127,6 +127,8 @@ const addNewList = (parentEl, title) => {
 
     const addCardForm = addCardBtn.parentElement.previousElementSibling;
     unHide(addCardForm);
+
+    addCardForm.querySelector('textarea').focus();
   });
 
   addCardBtnContainer.appendChild(addCardBtn);
@@ -373,5 +375,17 @@ addCardBtns.forEach((addCardBtn) => {
 
     const addCardForm = addCardBtn.parentElement.previousElementSibling;
     unHide(addCardForm);
+
+    addCardForm.querySelector('textarea').focus();
   });
+});
+
+// Handle submit
+const addCardForm = document.querySelector('.add-card-form');
+onSubmit.bind(addCardForm)((e) => {
+  e.preventDefault();
+
+  const textArea = addCardForm.querySelector('textarea');
+  const value = textArea.value;
+  if (!value) return;
 });

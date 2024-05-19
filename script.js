@@ -48,10 +48,16 @@ const addNewList = (parentEl, title) => {
     // relative + z-index => removes parent bg when dragging element
     'draggable-list w-full self-start relative z-[1] bg-[rgb(241,242,244)] rounded-xl p-2 space-y-2';
 
+  const listHeader = document.createElement('header');
+  listHeader.className = 'flex items-center gap-2';
+
+  const headerDiv = document.createElement('div');
+  headerDiv.className = 'w-full';
+
   const listH2 = document.createElement('h2');
   listH2.setAttribute('tabindex', '0');
   listH2.className =
-    'px-3 pt-1 pb-2 font-semibold rounded-md cursor-pointer list-title';
+    'px-3 py-2 font-semibold rounded-md cursor-pointer list-title';
   listH2.textContent = title;
 
   const titleInput = document.createElement('input');
@@ -59,9 +65,18 @@ const addNewList = (parentEl, title) => {
   titleInput.className =
     'hidden w-full px-3 py-2 font-semibold rounded-md edit-list-title-input';
 
-  const listHeader = document.createElement('header');
-  listHeader.appendChild(listH2);
-  listHeader.appendChild(titleInput);
+  headerDiv.appendChild(listH2);
+  headerDiv.appendChild(titleInput);
+
+  const deleteCardeBtn = document.createElement('button');
+  deleteCardeBtn.setAttribute('id', 'delete-list-btn');
+  deleteCardeBtn.setAttribute('type', 'button');
+  deleteCardeBtn.className = 'p-1.5 rounded-md hover:bg-[#091e420f]';
+  deleteCardeBtn.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
+
+  listHeader.appendChild(headerDiv);
+  listHeader.appendChild(deleteCardeBtn);
 
   const cardList = document.createElement('ul');
   cardList.className = 'space-y-2';
@@ -185,6 +200,12 @@ onClick.bind(activeLists)((e) => {
   // Handle clicks on list titles (i.e. only focus on input if user is clicking title area AND not when holding to drag)
   if (e.target.classList.contains('list-title')) {
     showEditTitleInput(e.target);
+  }
+
+  // Handle delete list via button
+  if (e.target.closest('button').id === 'delete-list-btn') {
+    const list = e.target.closest('li');
+    activeLists.removeChild(list);
   }
 });
 

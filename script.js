@@ -107,6 +107,12 @@ const addNewList = (parentEl, title) => {
   cancelCardBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
 
+  onClick.bind(cancelCardBtn)((e) => {
+    hide(addCardForm);
+    newCardTextArea.value = '';
+    unHide(addCardBtnContainer);
+  });
+
   addCardFormFooter.appendChild(submitCardBtn);
   addCardFormFooter.appendChild(cancelCardBtn);
 
@@ -202,7 +208,7 @@ const addNewCard = (cardList, description) => {
   const card = document.createElement('div');
   card.setAttribute('draggable', 'true');
   card.className =
-    'px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md draggable-card relative z-[1]';
+    'px-3 py-2 bg-white border border-gray-200 break-words rounded-md shadow-md draggable-card relative z-[1]';
   card.textContent = description;
 
   cardDropArea.appendChild(card);
@@ -436,4 +442,14 @@ onKeyUp.bind(addCardForm)((e) => {
   if (e.keyCode === 13 && !e.shiftKey) {
     submitNewCard(addCardForm);
   }
+});
+
+// Delete later
+const cancelAddCardBtn = document.querySelector('.cancel-add-card-btn');
+onClick.bind(cancelAddCardBtn)((e) => {
+  const addCardForm = cancelAddCardBtn.closest('form');
+  hide(addCardForm);
+  const textArea = addCardForm.querySelector('textarea');
+  textArea.value = '';
+  unHide(addCardForm.nextElementSibling);
 });

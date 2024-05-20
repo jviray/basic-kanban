@@ -208,7 +208,7 @@ const addNewCard = (cardList, description) => {
   const card = document.createElement('div');
   card.setAttribute('draggable', 'true');
   card.className =
-    'px-3 py-2 bg-white border border-gray-200 break-words rounded-md shadow-md draggable-card relative z-[1]';
+    'px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md draggable-card relative z-[1] hover:outline-blue-600 outline outline-transparent outline-2 cursor-pointer';
   card.textContent = description;
 
   cardDropArea.appendChild(card);

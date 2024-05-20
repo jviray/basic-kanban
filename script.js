@@ -218,6 +218,13 @@ const addNewCard = (cardList, description) => {
   deleteCardBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
 
+  // This needs to come before appending delete card btn
+  card.textContent = description;
+
+  card.appendChild(deleteCardBtn);
+
+  cardDropArea.appendChild(card);
+
   onMouseOver.bind(card)((e) => {
     unHide(deleteCardBtn);
   });
@@ -226,12 +233,10 @@ const addNewCard = (cardList, description) => {
     hide(deleteCardBtn);
   });
 
-  // This needs to come before appending delete card btn
-  card.textContent = description;
-
-  card.appendChild(deleteCardBtn);
-
-  cardDropArea.appendChild(card);
+  onClick.bind(deleteCardBtn)((e) => {
+    const cardList = deleteCardBtn.parentElement.parentElement;
+    cardList.removeChild(card);
+  });
 
   cardList.appendChild(cardDropArea);
 };
@@ -485,5 +490,15 @@ cards.forEach((card) => {
 
   onMouseLeave.bind(card)((e) => {
     hide(deleteCardBtn);
+  });
+});
+
+// Delete
+const deleteCardBtns = document.querySelectorAll('.delete-card-btn');
+deleteCardBtns.forEach((btn) => {
+  onClick.bind(btn)((e) => {
+    const cardList = btn.closest('.card-list');
+    const cardToDelete = btn.closest('.card-drop-area');
+    cardList.removeChild(cardToDelete);
   });
 });

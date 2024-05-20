@@ -223,7 +223,31 @@ const addNewCard = (cardList, description) => {
 
   card.appendChild(deleteCardBtn);
 
+  const textArea = document.createElement('textarea');
+  textArea.className =
+    'hidden block w-full px-3 py-2 text-left border border-gray-200 rounded-md shadow-md resize-none focus:outline-blue-600 outline outline-transparent outline-2';
+
   cardDropArea.appendChild(card);
+  cardDropArea.appendChild(textArea);
+
+  onClick.bind(card)((e) => {
+    const currentTextContent = card.innerText.trim();
+
+    // Use current card text
+    textArea.value = currentTextContent;
+
+    hide(card);
+    unHide(textArea);
+
+    // Resize textarea fit text
+    const newHeight = textArea.scrollHeight;
+    textArea.style.height = `${newHeight}px`;
+
+    // Place cursor at end of text
+    const endText = textArea.value.length;
+    textArea.setSelectionRange(endText, endText);
+    textArea.focus();
+  });
 
   onMouseOver.bind(card)((e) => {
     unHide(deleteCardBtn);
@@ -490,6 +514,27 @@ cards.forEach((card) => {
 
   onMouseLeave.bind(card)((e) => {
     hide(deleteCardBtn);
+  });
+
+  // Show edit card textarea when card clicked
+  onClick.bind(card)((e) => {
+    const currentTextContent = card.innerText.trim();
+
+    // Use current card text
+    const textArea = card.nextElementSibling;
+    textArea.value = currentTextContent;
+
+    hide(card);
+    unHide(textArea);
+
+    // Resize textarea fit text
+    const newHeight = textArea.scrollHeight;
+    textArea.style.height = `${newHeight}px`;
+
+    // Place cursor at end of text
+    const endText = textArea.value.length;
+    textArea.setSelectionRange(endText, endText);
+    textArea.focus();
   });
 });
 

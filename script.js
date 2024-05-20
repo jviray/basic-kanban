@@ -31,6 +31,8 @@ const onKeyUp = handleEvent('keyup');
 const onDragStart = handleEvent('dragstart');
 const onDragOver = handleEvent('dragover');
 const onDragEnd = handleEvent('dragend');
+const onMouseOver = handleEvent('mouseover');
+const onMouseLeave = handleEvent('mouseleave');
 
 // Assumes using tailwind
 const hide = addClasses('hidden');
@@ -209,7 +211,25 @@ const addNewCard = (cardList, description) => {
   card.setAttribute('draggable', 'true');
   card.className =
     'px-3 py-2 bg-white border border-gray-200 rounded-md shadow-md draggable-card relative z-[1] hover:outline-blue-600 outline outline-transparent outline-2 cursor-pointer';
+
+  const deleteCardBtn = document.createElement('button');
+  deleteCardBtn.className =
+    'delete-card-btn p-1.5 bg-transparent rounded-md hover:bg-[#091e420f] absolute top-0.5 right-0.5 hidden';
+  deleteCardBtn.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
+
+  onMouseOver.bind(card)((e) => {
+    unHide(deleteCardBtn);
+  });
+
+  onMouseLeave.bind(card)((e) => {
+    hide(deleteCardBtn);
+  });
+
+  // This needs to come before appending delete card btn
   card.textContent = description;
+
+  card.appendChild(deleteCardBtn);
 
   cardDropArea.appendChild(card);
 
@@ -452,4 +472,18 @@ onClick.bind(cancelAddCardBtn)((e) => {
   const textArea = addCardForm.querySelector('textarea');
   textArea.value = '';
   unHide(addCardForm.nextElementSibling);
+});
+
+// Delete later (for mock cards only), handle hover on card
+const cards = document.querySelectorAll('.draggable-card');
+cards.forEach((card) => {
+  const deleteCardBtn = card.querySelector('.delete-card-btn');
+
+  onMouseOver.bind(card)((e) => {
+    unHide(deleteCardBtn);
+  });
+
+  onMouseLeave.bind(card)((e) => {
+    hide(deleteCardBtn);
+  });
 });

@@ -275,7 +275,8 @@ const addNewCard = (cardList, description) => {
 
 const submitNewCard = (form) => {
   const textArea = form.querySelector('textarea');
-  const value = textArea.value;
+  const value = textArea.value.trim();
+
   if (!value) return;
 
   const cardList = form.parentElement.previousElementSibling;

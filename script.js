@@ -378,6 +378,26 @@ const setCardTextContent = (el) => {
   textArea.style.height = `${newHeight}px`;
 };
 
+const insertAboveTask = (cardList, mouseY) => {
+  const els = cardList.querySelectorAll(
+    '.draggable-card:not(#dragging-element)'
+  );
+
+  let closestTask = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+
+  els.forEach((task) => {
+    rect = task.getBoundingClientRect();
+    const offset = mouseY - rect.top;
+    if (offset < 0 && offset > closestOffset) {
+      closestTask = task;
+      closestOffset = offset;
+    }
+  });
+
+  return closestTask;
+};
+
 // State
 let recentCurrentTitle;
 let recentCurrentCardContent;
@@ -549,29 +569,6 @@ onDragOver.bind(activeLists)((e) => {
   }
 });
 
-// ===================================================================
-
-const insertAboveTask = (cardList, mouseY) => {
-  const els = cardList.querySelectorAll(
-    '.draggable-card:not(#dragging-element)'
-  );
-
-  let closestTask = null;
-  let closestOffset = Number.NEGATIVE_INFINITY;
-
-  els.forEach((task) => {
-    rect = task.getBoundingClientRect();
-    const offset = mouseY - rect.top;
-    if (offset < 0 && offset > closestOffset) {
-      closestTask = task;
-      closestOffset = offset;
-    }
-  });
-
-  return closestTask;
-};
-
-// Delete later
 // Handle card drag
 const cardLists = document.querySelectorAll('.card-list');
 cardLists.forEach((cardList) => {
@@ -618,7 +615,6 @@ cardLists.forEach((cardList) => {
   });
 });
 
-// Delete later
 // Show add card form
 const addCardBtns = document.querySelectorAll('.add-card-btn');
 addCardBtns.forEach((addCardBtn) => {
@@ -632,7 +628,6 @@ addCardBtns.forEach((addCardBtn) => {
   });
 });
 
-// Delete later
 // Handle click submit new card
 const addCardForm = document.querySelector('.add-card-form');
 onSubmit.bind(addCardForm)((e) => {
@@ -640,7 +635,6 @@ onSubmit.bind(addCardForm)((e) => {
   submitNewCard(addCardForm);
 });
 
-// Delete later
 // Handle `enter` submit new card
 onKeyUp.bind(addCardForm)((e) => {
   if (e.keyCode === 13 && !e.shiftKey) {
@@ -648,7 +642,6 @@ onKeyUp.bind(addCardForm)((e) => {
   }
 });
 
-// Delete later
 // Handle cancel add card form
 const cancelAddCardBtn = document.querySelector('.cancel-add-card-btn');
 onClick.bind(cancelAddCardBtn)((e) => {
@@ -659,7 +652,6 @@ onClick.bind(cancelAddCardBtn)((e) => {
   unHide(addCardForm.nextElementSibling);
 });
 
-// Delete later
 const cardDropsAreas = document.querySelectorAll('.card-drop-area');
 cardDropsAreas.forEach((area) => {
   // Handle `enter` event on edit card
@@ -681,7 +673,6 @@ cardDropsAreas.forEach((area) => {
   });
 });
 
-// Delete later (for mock cards only)
 // Handle hover on card
 const cards = document.querySelectorAll('.draggable-card');
 cards.forEach((card) => {
@@ -720,7 +711,6 @@ cards.forEach((card) => {
   });
 });
 
-// Delete
 const deleteCardBtns = document.querySelectorAll('.delete-card-btn');
 deleteCardBtns.forEach((btn) => {
   onClick.bind(btn)((e) => {

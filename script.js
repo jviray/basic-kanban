@@ -69,7 +69,7 @@ const addNewList = (parentEl, title) => {
   listHeader.appendChild(deleteListBtn);
 
   const cardList = document.createElement('ul');
-  cardList.className = 'space-y-2 card-list';
+  cardList.className = 'h-full space-y-2 border border-transparent card-list';
 
   onDragStart.bind(cardList)((e) => {
     if (e.target.classList.contains('draggable-card')) {
@@ -551,6 +551,26 @@ onDragOver.bind(activeLists)((e) => {
 
 // ===================================================================
 
+const insertAboveTask = (cardList, mouseY) => {
+  const els = cardList.querySelectorAll(
+    '.draggable-card:not(#dragging-element)'
+  );
+
+  let closestTask = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+
+  els.forEach((task) => {
+    rect = task.getBoundingClientRect();
+    const offset = mouseY - rect.top;
+    if (offset < 0 && offset > closestOffset) {
+      closestTask = task;
+      closestOffset = offset;
+    }
+  });
+
+  return closestTask;
+};
+
 // Delete later
 // Handle card drag
 const cardLists = document.querySelectorAll('.card-list');
@@ -575,6 +595,7 @@ cardLists.forEach((cardList) => {
 
   onDragOver.bind(cardList)((e) => {
     e.preventDefault();
+
     // Return early if card isn't being dragged
     if (
       !document
@@ -582,17 +603,17 @@ cardLists.forEach((cardList) => {
         .classList.contains('draggable-card')
     )
       return;
-    if (e.target.classList.contains('draggable-card')) {
-      // Get all cards except the one dragging
-      const availableOptions = document.querySelectorAll(
-        '.draggable-card:not(#dragging-element)'
+
+    const bottomTask = insertAboveTask(cardList, e.clientY);
+    const draggingCard = document.querySelector('#dragging-element');
+
+    if (!bottomTask) {
+      cardList.appendChild(draggingCard.parentElement);
+    } else {
+      cardList.insertBefore(
+        draggingCard.parentElement,
+        bottomTask.parentElement
       );
-      const { closestOption, offsets } = getClosestOption(
-        availableOptions,
-        'vertical',
-        e.clientY
-      );
-      const draggingCard = document.querySelector('#dragging-element');
     }
   });
 });

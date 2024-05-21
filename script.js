@@ -304,34 +304,59 @@ const submitNewCard = (form) => {
   textArea.value = '';
 };
 
-const getClosestOption = (availableOptions, mousePositionX) => {
+const getClosestOption = (availableOptions, orientation, mousePosition) => {
   let closestOption = {
-    left: null,
+    top: null,
     right: null,
+    bottom: null,
+    left: null,
   };
 
   let offsets = {
-    left: Number.NEGATIVE_INFINITY,
+    top: Number.NEGATIVE_INFINITY,
     right: Number.NEGATIVE_INFINITY,
+    bottom: Number.NEGATIVE_INFINITY,
+    left: Number.NEGATIVE_INFINITY,
   };
 
   availableOptions.forEach((option) => {
     // Get x-axis position of left side of option
-    const { left: leftSide, right: rightSide } = option.getBoundingClientRect();
+    const {
+      top: topSide,
+      right: rightSide,
+      bottom: bottomSide,
+      left: leftSide,
+    } = option.getBoundingClientRect();
 
-    // TODO Create helper function
-    const leftOffset = mousePositionX - leftSide;
-    if (leftOffset < 0 && leftOffset > offsets.left) {
-      // Set closest left option
-      closestOption.left = option;
-      offsets.left = leftOffset;
-    }
+    if (orientation === 'horizontal') {
+      // TODO Create helper function
+      const leftOffset = mousePosition - leftSide;
+      if (leftOffset < 0 && leftOffset > offsets.left) {
+        // Set closest left option
+        closestOption.left = option;
+        offsets.left = leftOffset;
+      }
 
-    const rightOffset = rightSide - mousePositionX;
-    if (rightOffset < 0 && rightOffset > offsets.right) {
-      // Set closest right option
-      closestOption.right = option;
-      offsets.right = rightOffset;
+      const rightOffset = rightSide - mousePosition;
+      if (rightOffset < 0 && rightOffset > offsets.right) {
+        // Set closest right option
+        closestOption.right = option;
+        offsets.right = rightOffset;
+      }
+    } else if (orientation === 'vertical') {
+      const topOffset = mousePosition - topSide;
+      if (topOffset < 0 && topOffset > offsets.top) {
+        // Set closest top option
+        closestOption.top = option;
+        offsets.top = topOffset;
+      }
+
+      const bottomOffset = bottomSide - mousePosition;
+      if (bottomOffset < 0 && bottomOffset > offsets.bottom) {
+        // Set closest bottom option
+        closestOption.bottom = option;
+        offsets.bottom = bottomOffset;
+      }
     }
   });
 
@@ -470,6 +495,7 @@ onDragOver.bind(activeLists)((e) => {
   );
   const { closestOption, offsets } = getClosestOption(
     availableOptions,
+    'horizontal',
     e.clientX
   );
   const draggingList = document.querySelector('#dragging-element');
@@ -563,7 +589,8 @@ cardLists.forEach((cardList) => {
       );
       const { closestOption, offsets } = getClosestOption(
         availableOptions,
-        e.clientX
+        'vertical',
+        e.clientY
       );
       const draggingCard = document.querySelector('#dragging-element');
     }

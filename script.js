@@ -89,6 +89,30 @@ const addNewList = (parentEl, title) => {
     }
   });
 
+  onDragOver.bind(cardList)((e) => {
+    e.preventDefault();
+
+    // Return early if card isn't being dragged
+    if (
+      !document
+        .querySelector('#dragging-element')
+        .classList.contains('draggable-card')
+    )
+      return;
+
+    const bottomTask = insertAboveTask(cardList, e.clientY);
+    const draggingCard = document.querySelector('#dragging-element');
+
+    if (!bottomTask) {
+      cardList.appendChild(draggingCard.parentElement);
+    } else {
+      cardList.insertBefore(
+        draggingCard.parentElement,
+        bottomTask.parentElement
+      );
+    }
+  });
+
   const listFooter = document.createElement('div');
 
   const addCardForm = document.createElement('form');

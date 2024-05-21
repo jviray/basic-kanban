@@ -24,21 +24,9 @@ const removeClasses = (classes) => (el) => {
   el.classList.remove(classes);
 };
 
-const onClick = handleEvent('click');
-const onSubmit = handleEvent('submit');
-const onFocusOut = handleEvent('focusout');
-const onKeyUp = handleEvent('keyup');
-const onDragStart = handleEvent('dragstart');
-const onDragOver = handleEvent('dragover');
-const onDragEnd = handleEvent('dragend');
-const onMouseOver = handleEvent('mouseover');
-const onMouseLeave = handleEvent('mouseleave');
-
 // Assumes using tailwind
 const hide = addClasses('hidden');
 const unHide = removeClasses('hidden');
-
-// =====================================================================
 
 const addNewList = (parentEl, title) => {
   const listDropArea = document.createElement('li');
@@ -218,17 +206,22 @@ const addNewCard = (cardList, description) => {
   deleteCardBtn.innerHTML =
     '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>';
 
-  // This needs to come before appending delete card btn
-  card.textContent = description;
+  const textContainer = document.createElement('p');
+  textContainer.className = 'text-container';
+
+  textContainer.textContent = description;
 
   card.appendChild(deleteCardBtn);
+  card.appendChild(textContainer);
 
   const textArea = document.createElement('textarea');
   textArea.className =
-    'hidden block w-full px-3 py-2 text-left border border-gray-200 rounded-md shadow-md resize-none focus:outline-blue-600 outline outline-transparent outline-2';
+    'hidden block w-full px-3 py-2 text-left border border-gray-200 rounded-md shadow-md resize-none edit-card-textarea focus:outline-blue-600 outline outline-transparent outline-2';
 
   cardDropArea.appendChild(card);
   cardDropArea.appendChild(textArea);
+
+  cardList.appendChild(cardDropArea);
 
   onClick.bind(card)((e) => {
     const currentTextContent = card.innerText.trim();
@@ -262,7 +255,15 @@ const addNewCard = (cardList, description) => {
     cardList.removeChild(card);
   });
 
-  cardList.appendChild(cardDropArea);
+  onKeyUp.bind(textArea)((e) => {
+    if (
+      e.target.classList.contains('edit-card-textarea') &&
+      e.keyCode === 13 &&
+      !e.shiftKey
+    ) {
+      setCardTextContent(e.target);
+    }
+  });
 };
 
 const submitNewCard = (form) => {
@@ -311,10 +312,34 @@ const getClosestOption = (availableOptions, mousePositionX) => {
   return { closestOption, offsets };
 };
 
-// =====================================================================
+const setCardTextContent = (el) => {
+  const textArea = el;
+  const newText = textArea.value.trim();
+  const card = textArea.previousElementSibling;
+
+  const textContainer = card.querySelector('.text-container');
+  textContainer.innerText = newText || recentCurrentCardContent;
+
+  hide(textArea);
+  unHide(card);
+
+  const newHeight = textArea.scrollHeight;
+  textArea.style.height = `${newHeight}px`;
+};
 
 // State
 let recentCurrentTitle;
+let recentCurrentCardContent;
+
+const onClick = handleEvent('click');
+const onSubmit = handleEvent('submit');
+const onFocusOut = handleEvent('focusout');
+const onKeyUp = handleEvent('keyup');
+const onDragStart = handleEvent('dragstart');
+const onDragOver = handleEvent('dragover');
+const onDragEnd = handleEvent('dragend');
+const onMouseOver = handleEvent('mouseover');
+const onMouseLeave = handleEvent('mouseleave');
 
 const addListBtn = document.querySelector('#add-list-btn');
 onClick.bind(addListBtn)((e) => {
@@ -464,6 +489,7 @@ onDragOver.bind(activeLists)((e) => {
 });
 
 // Delete later
+// Show add card form
 const addCardBtns = document.querySelectorAll('.add-card-btn');
 addCardBtns.forEach((addCardBtn) => {
   onClick.bind(addCardBtn)((e) => {
@@ -481,7 +507,6 @@ addCardBtns.forEach((addCardBtn) => {
 const addCardForm = document.querySelector('.add-card-form');
 onSubmit.bind(addCardForm)((e) => {
   e.preventDefault();
-
   submitNewCard(addCardForm);
 });
 
@@ -494,6 +519,7 @@ onKeyUp.bind(addCardForm)((e) => {
 });
 
 // Delete later
+// Handle cancel add card form
 const cancelAddCardBtn = document.querySelector('.cancel-add-card-btn');
 onClick.bind(cancelAddCardBtn)((e) => {
   const addCardForm = cancelAddCardBtn.closest('form');
@@ -503,15 +529,33 @@ onClick.bind(cancelAddCardBtn)((e) => {
   unHide(addCardForm.nextElementSibling);
 });
 
-// Delete later (for mock cards only), handle hover on card
+// Delete later
+const cardDropsAreas = document.querySelectorAll('.card-drop-area');
+cardDropsAreas.forEach((area) => {
+  // Handle `enter` event on edit card
+  onKeyUp.bind(area)((e) => {
+    if (
+      e.target.classList.contains('edit-card-textarea') &&
+      e.keyCode === 13 &&
+      !e.shiftKey
+    ) {
+      setCardTextContent(e.target);
+    }
+  });
+});
+
+// Delete later (for mock cards only)
+// Handle hover on card
 const cards = document.querySelectorAll('.draggable-card');
 cards.forEach((card) => {
   const deleteCardBtn = card.querySelector('.delete-card-btn');
 
+  // Show delete card btn
   onMouseOver.bind(card)((e) => {
     unHide(deleteCardBtn);
   });
 
+  // Hide delete card btn
   onMouseLeave.bind(card)((e) => {
     hide(deleteCardBtn);
   });
@@ -519,6 +563,7 @@ cards.forEach((card) => {
   // Show edit card textarea when card clicked
   onClick.bind(card)((e) => {
     const currentTextContent = card.innerText.trim();
+    recentCurrentCardContent = currentTextContent;
 
     // Use current card text
     const textArea = card.nextElementSibling;

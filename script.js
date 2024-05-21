@@ -69,7 +69,25 @@ const addNewList = (parentEl, title) => {
   listHeader.appendChild(deleteListBtn);
 
   const cardList = document.createElement('ul');
-  cardList.className = 'space-y-2';
+  cardList.className = 'space-y-2 card-list';
+
+  onDragStart.bind(cardList)((e) => {
+    if (e.target.classList.contains('draggable-card')) {
+      const card = e.target;
+      card.setAttribute('id', 'dragging-element');
+      removeClasses('hover:outline-blue-600')(card);
+      addClasses('opacity-[.4]')(card);
+    }
+  });
+
+  onDragEnd.bind(cardList)((e) => {
+    if (e.target.classList.contains('draggable-card')) {
+      const card = e.target;
+      card.removeAttribute('id');
+      addClasses('hover:outline-blue-600')(card);
+      removeClasses('opacity-[.4]')(card);
+    }
+  });
 
   const listFooter = document.createElement('div');
 
@@ -437,63 +455,99 @@ onDragEnd.bind(activeLists)((e) => {
 
 onDragOver.bind(activeLists)((e) => {
   e.preventDefault();
-  // Get all lists except the one dragging
-  const availableOptions = activeLists.querySelectorAll(
-    '.draggable-list:not(#dragging-element)'
-  );
-  const { closestOption, offsets } = getClosestOption(
-    availableOptions,
-    e.clientX
-  );
-  const draggingList = document.querySelector('#dragging-element');
 
-  if (closestOption.left && closestOption.right) {
-    // Choose between two whichever closest
-    let nextList;
-    if (offsets.left > offsets.right) {
-      nextList = closestOption.left;
+  // Return early if list isn't being dragged
+  if (
+    !document
+      .querySelector('#dragging-element')
+      .classList.contains('draggable-list')
+  )
+    return;
 
-      activeLists.insertBefore(
-        draggingList.parentElement,
-        closestOption.left.parentElement
-      );
-    } else if (offsets.left < offsets.right) {
-      nextList = closestOption.right;
-      activeLists.insertBefore(
-        draggingList.parentElement,
-        closestOption.right.parentElement.nextSibling
-      );
-    }
-  } else if (closestOption.left) {
-    // Shift left
+  if (e.target.classList.contains('draggable-list')) {
+    // Get all lists except the one dragging
+    const availableOptions = activeLists.querySelectorAll(
+      '.draggable-list:not(#dragging-element)'
+    );
+    const { closestOption, offsets } = getClosestOption(
+      availableOptions,
+      e.clientX
+    );
+    const draggingList = document.querySelector('#dragging-element');
 
-    // Need to do equivalent of prepending to the start
+    if (closestOption.left && closestOption.right) {
+      // Choose between two whichever closest
+      let nextList;
+      if (offsets.left > offsets.right) {
+        nextList = closestOption.left;
 
-    if (draggingList.parentElement === activeLists.children[1]) {
-      activeLists.prepend(draggingList.parentElement);
-    } else {
-      activeLists.insertBefore(
-        draggingList.parentElement,
-        closestOption.left.parentElement
-      );
-    }
-  } else if (closestOption.right) {
-    // Shift right
+        activeLists.insertBefore(
+          draggingList.parentElement,
+          closestOption.left.parentElement
+        );
+      } else if (offsets.left < offsets.right) {
+        nextList = closestOption.right;
+        activeLists.insertBefore(
+          draggingList.parentElement,
+          closestOption.right.parentElement.nextSibling
+        );
+      }
+    } else if (closestOption.left) {
+      // Shift left
 
-    // Need to do equivalent of prepending to the start
+      // Need to do equivalent of prepending to the start
 
-    if (
-      draggingList.parentElement ===
-      activeLists.children[activeLists.children.length - 2] // Check if second to last!
-    ) {
-      activeLists.append(draggingList.parentElement);
-    } else {
-      activeLists.insertBefore(
-        draggingList.parentElement,
-        closestOption.right.parentElement.nextSibling
-      );
+      if (draggingList.parentElement === activeLists.children[1]) {
+        activeLists.prepend(draggingList.parentElement);
+      } else {
+        activeLists.insertBefore(
+          draggingList.parentElement,
+          closestOption.left.parentElement
+        );
+      }
+    } else if (closestOption.right) {
+      // Shift right
+
+      // Need to do equivalent of prepending to the start
+
+      if (
+        draggingList.parentElement ===
+        activeLists.children[activeLists.children.length - 2] // Check if second to last!
+      ) {
+        activeLists.append(draggingList.parentElement);
+      } else {
+        activeLists.insertBefore(
+          draggingList.parentElement,
+          closestOption.right.parentElement.nextSibling
+        );
+      }
     }
   }
+});
+
+// ===================================================================
+
+// Delete later
+// Handle card drag
+const cardLists = document.querySelectorAll('.card-list');
+cardLists.forEach((cardList) => {
+  onDragStart.bind(cardList)((e) => {
+    if (e.target.classList.contains('draggable-card')) {
+      const card = e.target;
+      card.setAttribute('id', 'dragging-element');
+      removeClasses('hover:outline-blue-600')(card);
+      addClasses('opacity-[.4]')(card);
+    }
+  });
+
+  onDragEnd.bind(cardList)((e) => {
+    if (e.target.classList.contains('draggable-card')) {
+      const card = e.target;
+      card.removeAttribute('id');
+      addClasses('hover:outline-blue-600')(card);
+      removeClasses('opacity-[.4]')(card);
+    }
+  });
 });
 
 // Delete later

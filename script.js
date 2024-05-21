@@ -223,8 +223,17 @@ const addNewCard = (cardList, description) => {
 
   cardList.appendChild(cardDropArea);
 
+  onMouseOver.bind(card)((e) => {
+    unHide(deleteCardBtn);
+  });
+
+  onMouseLeave.bind(card)((e) => {
+    hide(deleteCardBtn);
+  });
+
   onClick.bind(card)((e) => {
     const currentTextContent = card.innerText.trim();
+    recentCurrentCardContent = currentTextContent;
 
     // Use current card text
     textArea.value = currentTextContent;
@@ -242,19 +251,6 @@ const addNewCard = (cardList, description) => {
     textArea.focus();
   });
 
-  onMouseOver.bind(card)((e) => {
-    unHide(deleteCardBtn);
-  });
-
-  onMouseLeave.bind(card)((e) => {
-    hide(deleteCardBtn);
-  });
-
-  onClick.bind(deleteCardBtn)((e) => {
-    const cardList = deleteCardBtn.parentElement.parentElement;
-    cardList.removeChild(card);
-  });
-
   onKeyUp.bind(textArea)((e) => {
     if (
       e.target.classList.contains('edit-card-textarea') &&
@@ -263,6 +259,17 @@ const addNewCard = (cardList, description) => {
     ) {
       setCardTextContent(e.target);
     }
+  });
+
+  onFocusOut.bind(textArea)((e) => {
+    if (e.target.classList.contains('edit-card-textarea')) {
+      setCardTextContent(e.target);
+    }
+  });
+
+  onClick.bind(deleteCardBtn)((e) => {
+    const cardList = deleteCardBtn.parentElement.parentElement.parentElement;
+    cardList.removeChild(cardDropArea);
   });
 };
 
@@ -539,6 +546,13 @@ cardDropsAreas.forEach((area) => {
       e.keyCode === 13 &&
       !e.shiftKey
     ) {
+      setCardTextContent(e.target);
+    }
+  });
+
+  // Submit edit with textarea loses focus
+  onFocusOut.bind(area)((e) => {
+    if (e.target.classList.contains('edit-card-textarea')) {
       setCardTextContent(e.target);
     }
   });

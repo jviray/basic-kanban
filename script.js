@@ -464,63 +464,61 @@ onDragOver.bind(activeLists)((e) => {
   )
     return;
 
-  if (e.target.classList.contains('draggable-list')) {
-    // Get all lists except the one dragging
-    const availableOptions = activeLists.querySelectorAll(
-      '.draggable-list:not(#dragging-element)'
-    );
-    const { closestOption, offsets } = getClosestOption(
-      availableOptions,
-      e.clientX
-    );
-    const draggingList = document.querySelector('#dragging-element');
+  // Get all lists except the one dragging
+  const availableOptions = activeLists.querySelectorAll(
+    '.draggable-list:not(#dragging-element)'
+  );
+  const { closestOption, offsets } = getClosestOption(
+    availableOptions,
+    e.clientX
+  );
+  const draggingList = document.querySelector('#dragging-element');
 
-    if (closestOption.left && closestOption.right) {
-      // Choose between two whichever closest
-      let nextList;
-      if (offsets.left > offsets.right) {
-        nextList = closestOption.left;
+  if (closestOption.left && closestOption.right) {
+    // Choose between two whichever closest
+    let nextList;
+    if (offsets.left > offsets.right) {
+      nextList = closestOption.left;
 
-        activeLists.insertBefore(
-          draggingList.parentElement,
-          closestOption.left.parentElement
-        );
-      } else if (offsets.left < offsets.right) {
-        nextList = closestOption.right;
-        activeLists.insertBefore(
-          draggingList.parentElement,
-          closestOption.right.parentElement.nextSibling
-        );
-      }
-    } else if (closestOption.left) {
-      // Shift left
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestOption.left.parentElement
+      );
+    } else if (offsets.left < offsets.right) {
+      nextList = closestOption.right;
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestOption.right.parentElement.nextSibling
+      );
+    }
+  } else if (closestOption.left) {
+    // Shift left
 
-      // Need to do equivalent of prepending to the start
+    // Need to do equivalent of prepending to the start
 
-      if (draggingList.parentElement === activeLists.children[1]) {
-        activeLists.prepend(draggingList.parentElement);
-      } else {
-        activeLists.insertBefore(
-          draggingList.parentElement,
-          closestOption.left.parentElement
-        );
-      }
-    } else if (closestOption.right) {
-      // Shift right
+    if (draggingList.parentElement === activeLists.children[1]) {
+      activeLists.prepend(draggingList.parentElement);
+    } else {
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestOption.left.parentElement
+      );
+    }
+  } else if (closestOption.right) {
+    // Shift right
 
-      // Need to do equivalent of prepending to the start
+    // Need to do equivalent of prepending to the start
 
-      if (
-        draggingList.parentElement ===
-        activeLists.children[activeLists.children.length - 2] // Check if second to last!
-      ) {
-        activeLists.append(draggingList.parentElement);
-      } else {
-        activeLists.insertBefore(
-          draggingList.parentElement,
-          closestOption.right.parentElement.nextSibling
-        );
-      }
+    if (
+      draggingList.parentElement ===
+      activeLists.children[activeLists.children.length - 2] // Check if second to last!
+    ) {
+      activeLists.append(draggingList.parentElement);
+    } else {
+      activeLists.insertBefore(
+        draggingList.parentElement,
+        closestOption.right.parentElement.nextSibling
+      );
     }
   }
 });
@@ -546,6 +544,28 @@ cardLists.forEach((cardList) => {
       card.removeAttribute('id');
       addClasses('hover:outline-blue-600')(card);
       removeClasses('opacity-[.4]')(card);
+    }
+  });
+
+  onDragOver.bind(cardList)((e) => {
+    e.preventDefault();
+    // Return early if card isn't being dragged
+    if (
+      !document
+        .querySelector('#dragging-element')
+        .classList.contains('draggable-card')
+    )
+      return;
+    if (e.target.classList.contains('draggable-card')) {
+      // Get all cards except the one dragging
+      const availableOptions = document.querySelectorAll(
+        '.draggable-card:not(#dragging-element)'
+      );
+      const { closestOption, offsets } = getClosestOption(
+        availableOptions,
+        e.clientX
+      );
+      const draggingCard = document.querySelector('#dragging-element');
     }
   });
 });
